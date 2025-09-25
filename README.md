@@ -1,59 +1,59 @@
-🖥️ 1994-1996 — MEOS 1.x (First Release)
+MEOS 1.0 (v1.0)
 
-Inspired by Windows 3.1/95
+Frame: Solid gray, thick bevels (3.1-style) → lighter gray, thinner bevels (95-style).
 
-Taskbar + Start menu introduced
+Title Bar: Blue gradient, chunky 3D system buttons → flatter gray-blue with smaller beveled buttons, bold caption.
 
-True windowed multitasking
+Menu Bar: File | Options | Help (3.1) → File | Edit | View | Help (95).
 
-256-color UI themes, improved icons
+Icons: 16×16 / 32×32, 16-color palette (basic dithering).
 
-Early networking support
+Scrollbar: Boxy beveled gray with arrows.
 
-Early GUI shell on top of a DOS-like core
+MEOS 2.0 (v2.0)
 
-Program Manager–style interface
+Frame: Softer 3D borders, smoother shading.
 
-Basic multitasking, simple apps (notepad, calculator)
+Title Bar: Richer blue gradient, bold white caption text with subtle drop shadow.
 
-Grey dialogs and bitmap icons
+System Buttons: Rounder edges, glossy highlights.
 
-🖥️ 1996–1997 — MEOS 2.x (Second Release)
+Menu Bar: Standardized File | Edit | View | Help.
 
-Inspired by Windows 98 (Beta 3)
+Toolbar: Integrated Explorer toolbar; 16×16 / 24×24 icons; hover highlight.
 
-Taskbar + Start menu introduced
+Icons: 256-color support, smoother dithering, more detail.
 
-True windowed multitasking
+Scrollbar: Polished beveled look, smoother gradients.
 
-256-color UI themes, improved icons
+MEOS 3.0 (v3.0)
 
-Early networking support
+Frame: Flatter, neutral gray-blue; beveling reduced.
 
-🖥️ 1997–2000 — MEOS 3.x (Third Release)
+Title Bar: Professional blue gradient; bold, clean white text.
 
-Influenced by Windows 98
+System Buttons: Sleeker, flatter; subtle hover effects.
 
-Integrated File Explorer with tree navigation
+Menu Bar: Expanded Explorer layout: File | Edit | View | Favorites | Tools | Help.
 
-Theme support: silver, classic, and colorful variations
+Toolbar: Fully customizable; icons with optional text labels.
 
-Media Player and Paint tool bundled
+Icons: High-color (16-bit/24-bit); more realistic, shaded.
 
-Stable core with FAT-like filesystem
+Scrollbar: Thinner, with subtle highlights and less contrast.
 
-Runs easily in emulators or on modern hardware
+MEOS 4.0 (v4.0)
 
-🖥️ 2000–2001 — MEOS 4.x (Fourth Release)
+Frame: Rounded edges, colorful “Luna” theme (blue/green/silver variants).
 
-Influenced by Windows 2000 / ME / XP
+Title Bar: Glossy gradient, bright highlights, soft shadowed captions.
 
-Integrated File Explorer with tree navigation
+System Buttons: Fully rounded, color-coded (green maximize, red close, etc.).
 
-Theme support: silver, classic, and colorful variations
+Menu Bar: Blended into Explorer; sometimes replaced by task panes.
 
-Media Player and Paint tool bundled
+Toolbar: Larger colorful icons; integrated with side task panels.
 
-Stable core with FAT-like filesystem
+Icons: 32-bit alpha-blended; smooth transparency and drop shadows.
 
-A tribute to the MEOS (golden age) of desktop computing
+Scrollbar: Rounded arrows, soft pastel gradients.
