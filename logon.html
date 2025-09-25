@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Logon</title>
+  <link rel="stylesheet" href="98.css">
+  <link rel="icon" type="image/png" href="meos.png">
+    <style>
+    body {
+      background: black;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .window {
+      width: 400px;
+    }
+    .title-bar {
+      background: black;
+    }
+    .title-bar-text {
+      color: white;
+    }
+    .login-logo {
+      width: 80px;
+      margin-right: 10px;
+    }
+    .login-container {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    right {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 15px;
+      width: 100%;
+    }
+    rightcontain {
+      display: flex;
+      gap: 10px;
+    }
+    user a {
+      text-decoration: none;
+    }
+    /* Make min/max/close buttons disabled (no click) */
+    .title-bar-controls button {
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="window" style="background: #c0c0c0;">
+    <div class="title-bar">
+      <div class="title-bar-text">Welcome to MEOS</div>
+      <div class="title-bar-controls">
+        <!-- Decorative buttons only -->
+        <button aria-label="Help"></button>
+        <button aria-label="Minimize"></button>
+        <button aria-label="Maximize"></button>
+        <button aria-label="Close"></button>
+      </div>
+    </div>
+    <div class="window-body">
+      <div class="login-container">
+        <img src="MEOS.png" alt="MEOS Logo" class="login-logo">
+        <p>Type a user name and password to log on to MEOS.<br>MEOS.</p>
+      </div>
+
+      <div class="field-row-stacked" style="width: 100%;">
+        <label for="username">User name:</label>
+        <input id="username" type="text" />
+        <label for="password">Password:</label>
+        <input id="password" type="password" />
+      </div>
+
+      <right>
+        <button onclick="shutdownSystem()">Shutdown</button>
+        <rightcontain>
+          <user>
+            <a href="desktop.html">
+              <button>OK</button>
+            </a>
+          </user>
+          <button onclick="resetForm()">Cancel</button>
+        </rightcontain>
+      </right>
+    </div>
+  </div>
+
+  <script>
+    function shutdownSystem() {
+      alert("MEOS is shutting down...");
+      location.reload();
+    }
+
+    function resetForm() {
+      document.getElementById('username').value = '';
+      document.getElementById('password').value = '';
+    }
+  </script>
+</body>
+</html>

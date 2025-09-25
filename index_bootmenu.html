@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Boot Menu</title>
+  <link rel="stylesheet" href="98.css">
+  <link rel="icon" type="image/png" href="MEOS.png">
+  <style>
+    body {
+      background: black;
+      color: lime;
+      font-family: monospace;
+      font-size: 18px;
+      padding: 40px;
+    }
+    h1 {
+      color: yellow;
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+    li {
+      margin: 10px 0;
+    }
+    .option {
+      cursor: pointer;
+    }
+    .option:hover {
+      color: cyan;
+    }
+  </style>
+</head>
+<body>
+  <h1>MEOS Boot Menu</h1>
+  <ul>
+    <li class="option" onclick="bootMEOS()">1. Boot MEOS Normally</li>
+  </ul>
+
+  <script>
+    function bootMEOS() {
+      alert('Booting MEOS...');
+      setTimeout(() => {
+        window.location.href = 'logon.html';
+      }, 500); // delay before redirect (0.5s)
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,689 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<link rel="icon" type="image/png" href="apple-touch-icon.png">
+<title>The LucasScape</title>
+<link rel="stylesheet" href="98.css" />
+  <style>
+  /* Basic layout */
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%;font-family: Tahoma, Arial, sans-serif;background:#c0c0c0;color:#000}
+  body{background:#c0c0c0}
+  .window{max-width:1300px;margin:12px auto;padding:8px}
+      
+  /* Menu bar */
+  .menu-bar{display:flex;gap:6px;padding:6px 8px;background:#c0c0c0;border-bottom:2px solid #fff;align-items:center;font-size:13px}
+  .menu{position:relative}
+  .menu > button{background:transparent;border:1px solid transparent;padding:4px 8px;cursor:pointer;font-weight:bold}
+  .menu > button:hover{background:linear-gradient(#fff,#e6e6e6);border-color:#9a9a9a}
+  .menu-list{display:none;position:absolute;top:100%;left:0;min-width:220px;background:#f0f0f0;border:1px solid #8b8b8b;box-shadow:0 6px 12px rgba(0,0,0,0.25);z-index:100}
+  .menu-list button{display:block;width:100%;text-align:left;padding:6px 10px;border:none;background:transparent;cursor:pointer}
+  .menu-list button:hover{background:#c0c0c0}
+  .menu.open .menu-list { display:block; }
+  .menu-btn.active { background:linear-gradient(#fff,#e6e6e6); border:1px solid #9a9a9a; }
+  .menu-btn u { text-decoration: underline; }
+  .menu-list button:focus { background:#c0c0c0;color:#fff;outline:none; }
+
+  /* Toolbar */
+  .toolbar{display:flex;gap:6px;padding:8px;background:#c0c0c0;border-bottom:2px solid #cfcfcf;align-items:center}
+  .tool-btn{padding:4px 8px;border:1px solid #9d9d9d;border-radius:4px;background:color(#c0c0c0);cursor:pointer}
+  .tool-btn:active{background:#ddd}
+  .toolbar .spacer{flex:1}
+
+  /* Location */
+  .controls-row{display:flex;gap:8px;padding:8px;background:#c0c0c0;align-items:center;border-bottom:1px solid #cfcfcf}
+  .controls-row label{font-weight:600}
+  #siteInput{padding:6px 8px;border:1px solid #9a9a9a;border-radius:3px;min-width:360px}
+
+  /* Viewport */
+  .viewport{margin:12px;border:2px solid #606060;background:#c0c0c0;height:520px;overflow:hidden;display:flex;flex-direction:column}
+  iframe.viewer{flex:1;border:0;width:100%;height:100%;background:#c0c0c0}
+
+  /* Bottom/status */
+  .bottom-row{display:flex;justify-content:space-between;align-items:center;padding:8px;background:color(#c0c0c0);border-top:2px solid #fff}
+  .throbber{display:inline-block;margin-right:8px;visibility:hidden}
+  #throbIcon{width:30px;height:30px;display:block} /* explicit 30x30 as requested */
+
+  .progress-bar {display:inline-block;width:160px;height:12px;border:1px solid #000;margin-left:8px;overflow:hidden;background:#c0c0c0;position:relative;visibility:hidden;}
+  .progress-bar::before {content:"";position:absolute;width:200%;height:100%;background: repeating-linear-gradient(90deg,#000,#000 6px,transparent 6px,transparent 12px);animation: moveStripes 1s linear infinite;}
+  @keyframes moveStripes {from { transform: translateX(0);} to { transform: translateX(-12px);} }
+
+  /* Modal for lists */
+  .modal-backdrop{position:fixed;left:0;top:0;right:0;bottom:0;background:rgba(0,0,0,0.4);display:none;align-items:center;justify-content:center;z-index:200}
+  .modal{background:#fff;border:2px solid #666;padding:12px;width:520px;max-height:70vh;overflow:auto;border-radius:6px}
+  .modal h3{margin-bottom:8px}
+  .modal .row{display:flex;justify-content:space-between;gap:8px;margin-bottom:6px}
+  .modal button{margin-left:6px}
+
+  /* small helper */
+  .muted{color:#555;font-size:12px}
+  .small{font-size:12px}
+  .inline-btn{display:inline-block;padding:4px 8px;border:1px solid #aaa;background:#f8f8f8;border-radius:3px;cursor:pointer;margin-left:6px}
+  .kbd{background:#222;color:#fff;padding:2px 6px;border-radius:3px;font-size:12px;margin-left:6px}
+  /* Theme classes (applied to body) */
+  body.theme-ns1 {background:#c0c0c0;color:#000}
+  body.theme-ns1 .menu-bar,body.theme-ns1 .toolbar,body.theme-ns1 .controls-row,body.theme-ns1 .bottom-row {background:#d4d0c8;border:1px solid #808080}
+  body.theme-ns2 {background:#bfcad3;color:#000}
+  body.theme-ns2 .menu-bar,body.theme-ns2 .toolbar,body.theme-ns2 .controls-row,body.theme-ns2 .bottom-row {background:#dfeefb}
+  body.theme-ns3 {background:#2b6ca3;color:#fff}
+  body.theme-ns3 .menu-bar,body.theme-ns3 .toolbar,body.theme-ns3 .controls-row,body.theme-ns3 .bottom-row {background:#c0c0c0;color:#000}
+  body.theme-mosaic {background:#e3d9c6;color:#3b2f2f}
+  body.theme-mosaic .menu-bar,body.theme-mosaic .toolbar,body.theme-mosaic .controls-row,body.theme-mosaic .bottom-row {background:#e9e0cf;border:1px solid #8b7d6b}
+
+  /* responsive */
+  @media (max-width:700px){ #siteInput{min-width:120px} .modal{width:92%} }
+</style>
+</head>
+<body>
+  <div class="window" role="application" aria-label="The LucasScape">
+
+    <!-- Menu bar -->
+    <div class="menu-bar" id="menuBar">
+      <div class="menu" data-key="f">
+        <button class="menu-btn">File <u>F</u> ▾</button>
+        <div class="menu-list" data-menu="file">
+          <button id="mNewWindow">New Window (Ctrl+N)</button>
+          <button id="mNewTab">New Tab (Ctrl+T)</button>
+          <button id="mClose">Close Tab</button>
+          <button id="mOpenFile">Open File… (Ctrl+O)</button>
+          <button id="mOpen">Open Location…</button>
+          <button id="mExit">Exit</button>
+        </div>
+      </div>
+
+      <div class="menu" data-key="v">
+        <button class="menu-btn">View <u>V</u> ▾</button>
+        <div class="menu-list" data-menu="view">
+          <button id="mTextSmall">Text Size Small</button>
+          <button id="mTextMed">Text Size Medium</button>
+          <button id="mTextLarge">Text Size Large</button>
+        </div>
+      </div>
+
+      <div class="menu" data-key="g">
+        <button class="menu-btn">Go <u>G</u> ▾</button>
+        <div class="menu-list" data-menu="go">
+          <button id="mBack">Back</button>
+          <button id="mForward">Forward</button>
+          <button id="mHome">Home</button>
+          <button id="mReload">Reload (Ctrl+R)</button>
+          <hr>
+          <button id="mShowHistory">Show History</button>
+          <button id="mClearHistory">Clear History</button>
+        </div>
+      </div>
+
+      <div class="menu" data-key="b">
+        <button class="menu-btn">Bookmarks <u>B</u> ▾</button>
+        <div class="menu-list" data-menu="bookmarks">
+          <button id="mAddBookmark">Add Bookmark</button>
+          <button id="mShowBookmarks">Show Bookmarks</button>
+          <button id="mShowFavorites">Show Favorites</button>
+        </div>
+      </div>
+
+      <div class="menu" data-key="s">
+        <button class="menu-btn">Skins <u>S</u> ▾</button>
+        <div class="menu-list" data-menu="skins">
+          <button data-skin="mosaic" class="mApply">Apply: NCSA Mosaic</button>
+          <button data-skin="ns1" class="mApply">Apply: Netscape 1.x</button>
+          <button data-skin="ns2" class="mApply">Apply: Netscape 2.x</button>
+          <button data-skin="ns3" class="mApply">Apply: Netscape 3.x</button>
+          <hr>
+          <button id="mResetSkin">Reset Skin</button>
+          <button id="mUploadSkin">Upload Skin (CSS)</button>
+          <button id="mRemoveSkin">Remove Custom Skin</button>
+        </div>
+      </div>
+
+      <div class="menu" data-key="t">
+        <button class="menu-btn">Tools <u>T</u> ▾</button>
+        <div class="menu-list" data-menu="tools">
+          <button id="mClearSearchHistory">Clear Search History</button>
+          <button id="mClearData">Clear Browsing Data…</button>
+        </div>
+      </div>
+
+      <div class="menu" data-key="h">
+        <button class="menu-btn">Help <u>H</u> ▾</button>
+        <div class="menu-list" data-menu="help">
+          <button id="mHelp">Help The LucasScape</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toolbar -->
+    <div class="toolbar">
+      <button class="tool-btn" id="btnBack">◀ Back</button>
+      <button class="tool-btn" id="btnForward">▶ Forward</button>
+      <button class="tool-btn" id="btnReload">⟳ Reload</button>
+      <button class="tool-btn" id="btnHome">🏠 Home</button>
+      <button class="tool-btn" id="btnStop">✖ Stop</button>
+      <div class="spacer"></div>
+
+      <!-- Throbber (30x30) -->
+      <div class="throbber" title="Loading...">
+        <img id="throbIcon" src="default.gif" alt="Loading">
+      </div>
+
+      <!-- theme chooser hidden by default (we still keep menu controls) -->
+      <div id="themeChooser" style="display:none;margin-left:10px;">
+        <select id="themeSelect">
+          <option value="default">Default</option>
+          <option value="mosaic">NCSA Mosaic</option>
+          <option value="ns1">Netscape 1.x</option>
+          <option value="ns2">Netscape 2.x</option>
+          <option value="ns3">Netscape 3.x</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Address bar -->
+    <div class="controls-row">
+      <label for="siteInput">Location:</label>
+      <input id="siteInput" type="text" value="https://theoldnet.com" />
+      <button class="tool-btn" id="goBtn">Go</button>
+    </div>
+
+    <!-- Viewport -->
+    <div class="viewport" id="viewport">
+      <iframe class="viewer" id="viewer" src="about:blank" title="LucasScape viewer"></iframe>
+      <div class="bottom-row">
+        <div>
+          <span id="throb" class="throbber small" aria-hidden="true"></span>
+          <div id="prog" class="progress-bar" aria-hidden="true"></div>
+          <span id="statusText">Document: Done</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal backdrop used for history/bookmarks/favorites -->
+  <div id="modalBackdrop" class="modal-backdrop">
+    <div class="modal" id="modalBox" role="dialog" aria-modal="true">
+      <h3 id="modalTitle">Modal</h3>
+      <div id="modalBody"></div>
+      <div style="margin-top:10px;text-align:right">
+        <button id="modalClose" class="tool-btn">Close</button>
+      </div>
+    </div>
+  </div>
+
+<script>
+/* ---------------------------
+   State & Persistence (localStorage)
+   --------------------------- */
+const LS_KEYS = {
+  history: 'lucas_history_v1',
+  searchHistory: 'lucas_searchhistory_v1',
+  bookmarks: 'lucas_bookmarks_v1',
+  favorites: 'lucas_favorites_v1',
+  customSkins: 'lucas_customskins_v1',
+  currentTheme: 'lucas_theme_v1'
+};
+
+let historyStack = [];
+let historyIndex = -1;
+let searchHistory = [];
+let bookmarks = []; // {title, url}
+let favorites = []; // {title, url}
+let customSkins = []; // {name, css}
+
+function saveState(){
+  localStorage.setItem(LS_KEYS.history, JSON.stringify(historyStack));
+  localStorage.setItem(LS_KEYS.searchHistory, JSON.stringify(searchHistory));
+  localStorage.setItem(LS_KEYS.bookmarks, JSON.stringify(bookmarks));
+  localStorage.setItem(LS_KEYS.favorites, JSON.stringify(favorites));
+  localStorage.setItem(LS_KEYS.customSkins, JSON.stringify(customSkins));
+}
+function loadState(){
+  try{
+    const h = JSON.parse(localStorage.getItem(LS_KEYS.history) || '[]');
+    const s = JSON.parse(localStorage.getItem(LS_KEYS.searchHistory) || '[]');
+    const b = JSON.parse(localStorage.getItem(LS_KEYS.bookmarks) || '[]');
+    const f = JSON.parse(localStorage.getItem(LS_KEYS.favorites) || '[]');
+    const cs = JSON.parse(localStorage.getItem(LS_KEYS.customSkins) || '[]');
+
+    historyStack = Array.isArray(h)? h : [];
+    searchHistory = Array.isArray(s)? s : [];
+    bookmarks = Array.isArray(b)? b : [];
+    favorites = Array.isArray(f)? f : [];
+    customSkins = Array.isArray(cs)? cs : [];
+  }catch(e){ console.warn('loadState failed', e); }
+}
+loadState();
+
+/* ---------------------------
+   DOM references
+   --------------------------- */
+const viewer = document.getElementById('viewer');
+const siteInput = document.getElementById('siteInput');
+const goBtn = document.getElementById('goBtn');
+const throbIcon = document.getElementById('throbIcon');
+const throbBottom = document.getElementById('throb');
+const prog = document.getElementById('prog');
+const statusText = document.getElementById('statusText');
+
+const btnBack = document.getElementById('btnBack');
+const btnForward = document.getElementById('btnForward');
+const btnReload = document.getElementById('btnReload');
+const btnHome = document.getElementById('btnHome');
+const btnStop = document.getElementById('btnStop');
+
+const themeSelect = document.getElementById('themeSelect');
+const themeChooser = document.getElementById('themeChooser');
+
+const modalBackdrop = document.getElementById('modalBackdrop');
+const modalTitle = document.getElementById('modalTitle');
+const modalBody = document.getElementById('modalBody');
+const modalClose = document.getElementById('modalClose');
+
+/* ---------------------------
+   Helpers: URL + history
+   --------------------------- */
+const HOME = 'https://theoldnet.com';
+function normalize(u){
+  if(!u) return 'about:blank';
+  u = u.trim();
+  if(!u.match(/^https?:\/\//i)) u = 'https://' + u;
+  return u;
+}
+function pushUrl(url){
+  if(historyIndex < historyStack.length - 1){
+    historyStack = historyStack.slice(0, historyIndex+1);
+  }
+  historyStack.push(url);
+  historyIndex = historyStack.length - 1;
+  saveState();
+}
+function showThrobber(){ throbIcon.style.visibility='visible'; throbBottom.style.visibility='visible'; prog.style.visibility='visible'; }
+function hideThrobber(){ throbIcon.style.visibility='hidden'; throbBottom.style.visibility='hidden'; prog.style.visibility='hidden'; }
+
+/* ---------------------------
+   Navigation
+   --------------------------- */
+function navigateTo(url, record=true){
+  if(!url) return;
+  showThrobber();
+  statusText.style.opacity = 0;
+  setTimeout(()=>{ statusText.textContent = 'Document: Loading...'; statusText.style.opacity = 1; }, 80);
+  viewer.src = url;
+  siteInput.value = url;
+  if(record){
+    pushUrl(url);
+    // add to search history
+    if(!searchHistory.includes(url)){
+      searchHistory.unshift(url);
+      if(searchHistory.length > 200) searchHistory.pop();
+      saveState();
+    }
+  }
+}
+
+// file open dialog
+function openFileDialog(){
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = '.htm,.html';
+  input.onchange = e => {
+    const f = e.target.files[0];
+    if(f){
+      const url = URL.createObjectURL(f);
+      navigateTo(url);
+    }
+  };
+  input.click();
+}
+
+/* ---------------------------
+   Theme / Skins
+   --------------------------- */
+const THEME_KEY = LS_KEYS.currentTheme;
+function applyTheme(theme){
+  document.body.classList.remove('theme-ns1','theme-ns2','theme-ns3','theme-mosaic');
+  // remove any injected custom skin element
+  const existing = document.getElementById('custom-skin');
+  if(existing) existing.remove();
+
+  if(theme === 'default' || !theme){
+    localStorage.removeItem(THEME_KEY);
+    themeChooser.style.display = 'none';
+    return;
+  }
+  themeChooser.style.display = 'inline-block';
+  document.body.classList.add('theme-'+theme);
+  localStorage.setItem(THEME_KEY, theme);
+}
+// preset skins mapping: (could be extended to inject CSS strings)
+function resetSkin(){
+  localStorage.removeItem(THEME_KEY);
+  applyTheme('default');
+  alert('Skin reset to default');
+}
+// upload CSS skin (user provided)
+function uploadSkin(){
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = '.css';
+  input.onchange = e => {
+    const f = e.target.files[0];
+    if(!f) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      const css = reader.result;
+      const name = prompt('Enter a name for this custom skin:', f.name) || f.name;
+      customSkins.push({name, css});
+      saveState();
+      alert('Custom skin uploaded: ' + name);
+    };
+    reader.readAsText(f);
+  };
+  input.click();
+}
+function removeCustomSkin(){
+  if(!customSkins.length){
+    alert('No custom skins saved.');
+    return;
+  }
+  const names = customSkins.map((s,i)=> `${i+1}) ${s.name}`).join('\n');
+  const idx = parseInt(prompt('Which skin to remove?\n'+names + '\nEnter list index (1..):'));
+  if(!idx || idx<1 || idx>customSkins.length) return alert('Cancelled or invalid index.');
+  const removed = customSkins.splice(idx-1,1)[0];
+  saveState();
+  alert('Removed custom skin: ' + removed.name);
+}
+function applyCustomSkin(index){
+  if(index < 0 || index >= customSkins.length) return;
+  const s = customSkins[index];
+  // inject style tag
+  const el = document.createElement('style');
+  el.id = 'custom-skin';
+  el.textContent = s.css;
+  document.head.appendChild(el);
+  localStorage.setItem('lucas_applied_customskin', index);
+  alert('Applied custom skin: ' + s.name);
+}
+function listCustomSkins(){
+  if(!customSkins.length) return alert('No custom skins uploaded.');
+  const list = customSkins.map((s,i)=> `${i+1}) ${s.name}`).join('\n');
+  const choice = parseInt(prompt('Choose custom skin to apply:\n' + list + '\nEnter number (1..):'));
+  if(choice && choice>=1 && choice<=customSkins.length) applyCustomSkin(choice-1);
+}
+
+/* ---------------------------
+   Bookmarks & Favorites
+   --------------------------- */
+function addBookmark(){
+  const url = siteInput.value || viewer.src || '';
+  if(!url || url === 'about:blank') return alert('No URL to bookmark');
+  const title = prompt('Bookmark title:', url) || url;
+  bookmarks.unshift({title, url});
+  saveState();
+  alert('Bookmark added');
+}
+function showBookmarks(){
+  renderListModal('Bookmarks', bookmarks, itemActionForBookmarks);
+}
+function showFavorites(){
+  renderListModal('Favorites', favorites, itemActionForFavorites);
+}
+function itemActionForBookmarks(item, idx){
+  return `<div class="row"><div style="flex:1"><b>${escapeHtml(item.title)}</b><div class="muted small">${escapeHtml(item.url)}</div></div>
+    <div style="min-width:160px;text-align:right">
+      <button onclick="modalNavigate(${idx},'bookmark')" class="tool-btn">Open</button>
+      <button onclick="modalFav(${idx})" class="tool-btn">Favorite</button>
+      <button onclick="modalRemoveBookmark(${idx})" class="tool-btn">Remove</button>
+    </div></div>`;
+}
+function itemActionForFavorites(item, idx){
+  return `<div class="row"><div style="flex:1"><b>${escapeHtml(item.title)}</b><div class="muted small">${escapeHtml(item.url)}</div></div>
+    <div style="min-width:120px;text-align:right">
+      <button onclick="modalNavigate(${idx},'favorite')" class="tool-btn">Open</button>
+      <button onclick="modalUnfav(${idx})" class="tool-btn">Remove</button>
+    </div></div>`;
+}
+// modal helpers called from rendered buttons (global functions)
+window.modalNavigate = function(i, type){
+  const list = type==='bookmark' ? bookmarks : favorites;
+  const url = list[i] && list[i].url;
+  if(url) {
+    navigateTo(url);
+    closeModal();
+  }
+};
+window.modalFav = function(i){
+  const b = bookmarks[i];
+  if(!b) return;
+  favorites.unshift(b);
+  saveState();
+  alert('Added to favorites');
+  closeModal();
+};
+window.modalUnfav = function(i){
+  if(confirm('Remove favorite?')){
+    favorites.splice(i,1); saveState(); alert('Removed'); closeModal();
+  }
+};
+window.modalRemoveBookmark = function(i){
+  if(confirm('Remove bookmark?')){
+    bookmarks.splice(i,1); saveState(); alert('Removed'); closeModal();
+  }
+};
+
+/* ---------------------------
+   History & Search History
+   --------------------------- */
+function showHistory(){
+  const rows = historyStack.slice().reverse().map((url, i) => {
+    const realIndex = historyStack.length - 1 - i;
+    return `<div class="row"><div style="flex:1">${escapeHtml(url)}</div>
+      <div style="min-width:140px;text-align:right">
+        <button onclick="openFromHistory(${realIndex})" class="tool-btn">Open</button>
+        <button onclick="removeHistoryIndex(${realIndex})" class="tool-btn">Remove</button>
+      </div></div>`;
+  }).join('');
+  renderRawModal('History', rows || '<div class="muted">No history yet</div>');
+}
+window.openFromHistory = function(idx){
+  const url = historyStack[idx];
+  if(url) navigateTo(url);
+  closeModal();
+};
+function removeHistoryIndex(idx){
+  if(confirm('Remove entry?')){
+    historyStack.splice(idx,1);
+    saveState();
+    showHistory();
+  }
+}
+function clearHistory(){
+  if(confirm('Clear browsing history?')){
+    historyStack = [];
+    historyIndex = -1;
+    saveState();
+    alert('History cleared');
+  }
+}
+function showSearchHistory(){
+  const rows = searchHistory.map((q,i)=> `<div class="row"><div style="flex:1">${escapeHtml(q)}</div>
+    <div style="min-width:140px;text-align:right">
+      <button onclick="navigateFromSearch(${i})" class="tool-btn">Open</button>
+      <button onclick="removeSearchEntry(${i})" class="tool-btn">Remove</button>
+    </div></div>`).join('');
+  renderRawModal('Search History', rows || '<div class="muted">No search history</div>');
+}
+window.navigateFromSearch = function(i){ const q = searchHistory[i]; if(q) navigateTo(q); closeModal(); }
+function removeSearchEntry(i){
+  if(confirm('Remove search entry?')){ searchHistory.splice(i,1); saveState(); showSearchHistory(); }
+}
+function clearSearchHistory(){ if(confirm('Clear search history?')){ searchHistory=[]; saveState(); alert('Search history cleared'); } }
+
+/* ---------------------------
+   Clear Browsing Data
+   --------------------------- */
+function clearBrowsingData(){
+  if(!confirm('Clear ALL browsing data? This will remove history, search history, bookmarks, favorites, and custom skins.')) return;
+  historyStack=[]; historyIndex=-1;
+  searchHistory=[]; bookmarks=[]; favorites=[]; customSkins=[];
+  localStorage.removeItem(LS_KEYS.history);
+  localStorage.removeItem(LS_KEYS.searchHistory);
+  localStorage.removeItem(LS_KEYS.bookmarks);
+  localStorage.removeItem(LS_KEYS.favorites);
+  localStorage.removeItem(LS_KEYS.customSkins);
+  localStorage.removeItem(THEME_KEY);
+  saveState();
+  alert('All browsing data cleared.');
+}
+
+/* ---------------------------
+   Modal rendering utilities
+   --------------------------- */
+function renderListModal(title, list, itemRenderer){
+  modalTitle.textContent = title;
+  if(!list.length){
+    modalBody.innerHTML = '<div class="muted">No items</div>';
+  } else {
+    modalBody.innerHTML = list.map((it,i)=> itemRenderer(it,i)).join('');
+  }
+  openModal();
+}
+function renderRawModal(title, html){
+  modalTitle.textContent = title;
+  modalBody.innerHTML = html;
+  openModal();
+}
+function openModal(){ modalBackdrop.style.display = 'flex'; modalBackdrop.scrollTop = 0; }
+function closeModal(){ modalBackdrop.style.display = 'none'; }
+
+/* ---------------------------
+   Utility
+   --------------------------- */
+function escapeHtml(s){ return String(s||'').replace(/[&<>"']/g, c=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c])); }
+
+/* ---------------------------
+   Menus (click, Alt navigation, arrow nav)
+   --------------------------- */
+const menus = document.querySelectorAll('.menu');
+const menuButtons = document.querySelectorAll('.menu-btn');
+let currentMenu = null;
+let currentIndex = -1;
+
+function closeMenus(){ menus.forEach(m=> m.classList.remove('open')); menuButtons.forEach(b=> b.classList.remove('active')); currentMenu=null; currentIndex=-1; }
+function openMenu(menu){
+  closeMenus();
+  menu.classList.add('open');
+  const btn = menu.querySelector('.menu-btn');
+  btn.classList.add('active');
+  currentMenu = menu.querySelectorAll('.menu-list button');
+  if(currentMenu.length) { currentIndex=0; currentMenu[currentIndex].focus(); }
+}
+menuButtons.forEach(btn=>{
+  btn.addEventListener('click', e=>{
+    e.stopPropagation();
+    const parent = btn.parentElement;
+    if(parent.classList.contains('open')) closeMenus(); else openMenu(parent);
+  });
+});
+document.addEventListener('click', closeMenus);
+document.addEventListener('keydown', (e)=>{
+  if(e.key === "Escape") closeMenus();
+  if(e.altKey && e.key.length===1){
+    const key = e.key.toLowerCase();
+    const targetMenu = document.querySelector(`.menu[data-key="${key}"]`);
+    if(targetMenu){ e.preventDefault(); openMenu(targetMenu); }
+  }
+  if(currentMenu){
+    if(e.key === "ArrowDown"){ e.preventDefault(); currentIndex=(currentIndex+1)%currentMenu.length; currentMenu[currentIndex].focus(); }
+    if(e.key === "ArrowUp"){ e.preventDefault(); currentIndex=(currentIndex-1+currentMenu.length)%currentMenu.length; currentMenu[currentIndex].focus(); }
+    if(e.key === "Enter"){ e.preventDefault(); currentMenu[currentIndex].click(); closeMenus(); }
+  }
+});
+
+/* ---------------------------
+   Wire UI actions
+   --------------------------- */
+// File menu
+document.getElementById('mNewWindow').addEventListener('click', ()=> window.open(window.location.href,'_blank','width=1024,height=768'));
+document.getElementById('mNewTab').addEventListener('click', ()=> window.open(window.location.href,'_blank'));
+document.getElementById('mClose').addEventListener('click', ()=> window.close());
+document.getElementById('mOpenFile').addEventListener('click', openFileDialog);
+document.getElementById('mOpen').addEventListener('click', ()=> {
+  const url = prompt('Enter URL:', 'https://');
+  if(url) navigateTo(normalize(url));
+});
+document.getElementById('mExit').addEventListener('click', ()=> window.close());
+
+// View
+document.getElementById('mTextSmall').addEventListener('click', ()=> viewer.style.fontSize = '12px');
+document.getElementById('mTextMed').addEventListener('click', ()=> viewer.style.fontSize = '16px');
+document.getElementById('mTextLarge').addEventListener('click', ()=> viewer.style.fontSize = '20px');
+
+// Go menu
+document.getElementById('mBack').addEventListener('click', ()=> { if(historyIndex>0){ historyIndex--; navigateTo(historyStack[historyIndex], false); }});
+document.getElementById('mForward').addEventListener('click', ()=> { if(historyIndex < historyStack.length-1){ historyIndex++; navigateTo(historyStack[historyIndex], false); }});
+document.getElementById('mHome').addEventListener('click', ()=> navigateTo(HOME));
+document.getElementById('mReload').addEventListener('click', ()=> { if(historyIndex>=0) navigateTo(historyStack[historyIndex], false); });
+document.getElementById('mShowHistory').addEventListener('click', showHistory);
+document.getElementById('mClearHistory').addEventListener('click', clearHistory);
+
+// Bookmarks
+document.getElementById('mAddBookmark').addEventListener('click', addBookmark);
+document.getElementById('mShowBookmarks').addEventListener('click', showBookmarks);
+document.getElementById('mShowFavorites').addEventListener('click', showFavorites);
+
+// Skins menu
+document.querySelectorAll('.mApply').forEach(btn => {
+  btn.addEventListener('click', e => {
+    const skin = btn.getAttribute('data-skin');
+    applyTheme(skin);
+    saveState();
+  });
+});
+document.getElementById('mResetSkin').addEventListener('click', resetSkin);
+document.getElementById('mUploadSkin').addEventListener('click', uploadSkin);
+document.getElementById('mRemoveSkin').addEventListener('click', removeCustomSkin);
+
+// Tools
+document.getElementById('mClearSearchHistory').addEventListener('click', clearSearchHistory);
+document.getElementById('mClearData').addEventListener('click', clearBrowsingData);
+
+// Help
+document.getElementById('mHelp').addEventListener('click', ()=> alert('version v1.0'));
+
+// Toolbar
+btnBack.addEventListener('click', ()=> { if(historyIndex>0){ historyIndex--; navigateTo(historyStack[historyIndex], false); }});
+btnForward.addEventListener('click', ()=> { if(historyIndex < historyStack.length-1){ historyIndex++; navigateTo(historyStack[historyIndex], false); }});
+btnReload.addEventListener('click', ()=> { if(historyIndex>=0) navigateTo(historyStack[historyIndex], false); });
+btnHome.addEventListener('click', ()=> navigateTo(HOME));
+btnStop.addEventListener('click', ()=> { hideThrobber(); statusText.textContent = 'Document: Done'; viewer.src = 'about:blank'; });
+
+// Address
+goBtn.addEventListener('click', ()=> { const u = normalize(siteInput.value); navigateTo(u); });
+
+// iframe load/hide throbber
+viewer.addEventListener('load', ()=> {
+  hideThrobber();
+  statusText.style.opacity = 0;
+  setTimeout(()=> { statusText.textContent = 'Document: Done'; statusText.style.opacity = 1; }, 80);
+});
+
+// modal close
+modalClose.addEventListener('click', closeModal);
+modalBackdrop.addEventListener('click', (e) => { if(e.target === modalBackdrop) closeModal(); });
+
+// On load apply saved theme and maybe custom skin
+(function init(){
+  const savedTheme = localStorage.getItem(THEME_KEY) || 'default';
+  if(savedTheme && savedTheme !== 'default') applyTheme(savedTheme);
+  // check if custom skin index applied
+  const idx = localStorage.getItem('lucas_applied_customskin');
+  if(idx !== null && customSkins[idx]) applyCustomSkin(parseInt(idx));
+  // initial navigate
+  if(!historyStack.length) navigateTo(HOME);
+})();
+
+</script>
+</body>
+</html>

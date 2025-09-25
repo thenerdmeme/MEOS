@@ -1,0 +1,1019 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="icon" type="image/png" href="fileman.png">
+<title>File Manager</title>
+
+<!-- 98.css -->
+<link rel="stylesheet" href="98.css">
+
+<!-- Material Symbols & Icons -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+
+<style>  
+    :root{
+    --accent:#00008b;
+    --bg:#d0d4d8;
+    --muted:#7a7a7a;
+    --panel-bg:#efefef;
+    --retro-font: "MS Sans Serif", "Microsoft Sans Serif", Tahoma, Arial, sans-serif;
+  }
+
+  html,body{height:100%;margin:0;font-family:var(--retro-font);-webkit-font-smoothing:none;-moz-osx-font-smoothing:auto;}
+  body{
+    background: linear-gradient(180deg,#cfcfcf 0,#e6e6e6 100%);
+    display:flex;align-items:stretch;justify-content:center;padding:16px;
+  }
+
+  /* App container */
+  #app{
+    width:1100px;height:760px;display:flex;flex-direction:column;
+    box-shadow: 6px 6px 0 rgba(0,0,0,0.12);
+  }
+
+  /* Top toolbar */
+  .menubar-95{ display:flex;gap:8px;padding:4px 8px;background:#c0c0c0;border-bottom:2px solid #808080;font-family:var(--retro-font);font-size:12px; }
+  .menubar-95 .menu{ padding:2px 8px; border:1px solid transparent; cursor:default; user-select:none; }
+  .menubar-95 .menu:hover{ background:#000080; color:#fff; }
+
+  .toolbar{
+    display:flex;gap:6px;padding:6px;background:#c0c0c0;
+    align-items:center;border-bottom:2px solid #808080;
+    box-shadow: inset -1px -1px 0 rgba(255,255,255,0.6), inset 1px 1px 0 rgba(0,0,0,0.3);
+  }
+  /* Classic 3D bevel buttons */
+  .toolbar .btn{
+    display:inline-flex;align-items:center;gap:6px;padding:4px 8px;border:2px solid #fff;
+    background:linear-gradient(#eaeaea,#cfcfcf);color:#000;font-weight:600;font-size:12px;
+    cursor:pointer;border-radius:2px;
+    box-shadow: 1px 1px 0 #000 inset, -1px -1px 0 #fff inset;
+  }
+  .toolbar .btn:active{ box-shadow: inset 1px 1px 0 #000, inset -1px -1px 0 #fff; transform:translateY(1px); }
+  .toolbar .btn[disabled]{ opacity:0.5; pointer-events:none; }
+  .toolbar label.btn{ display:inline-flex; align-items:center; gap:6px; }
+  .toolbar input[type="file"]{display:none;}
+  .toolbar select{padding:4px;border:2px solid #fff;background:#e6e6e6;border-radius:2px;}
+  .toolbar .group{display:flex;gap:6px;align-items:center;}
+  .toolbar .btn{
+    display:inline-flex;align-items:center;gap:6px;padding:6px 8px;border-radius:3px;
+    cursor:pointer;border:1px solid #9a9a9a;background:#f2f2f2;
+  }
+  .toolbar input[type="file"]{display:none;}
+  .toolbar select{padding:4px;border:1px solid #9a9a9a;background:#fff;border-radius:3px;}
+  .toolbar .group{display:flex;gap:6px;align-items:center;}
+
+  /* Main pane */
+  .main{
+    flex:1;display:flex;gap:8px;padding:8px;background:var(--panel-bg);
+  }
+  .pane{
+    border:2px solid #a0a0a0;background:#fff;padding:6px;overflow:auto;
+  }
+  .left{width:320px;display:flex;flex-direction:column;}
+  .left .tree{flex:1;overflow:auto;padding:4px;}
+  .right{flex:1;display:flex;flex-direction:column;}
+  .filelist{flex:1;overflow:auto;padding:6px;display:flex;flex-wrap:wrap;gap:6px;align-content:flex-start;}
+
+  /* file & folder cards */
+  .entry{
+    width:110px;height:110px;border:1px solid transparent;padding:6px;
+    display:flex;flex-direction:column;align-items:center;justify-content:flex-start;
+    cursor:pointer;text-align:center;border-radius:4px;
+    user-select:none;
+  }
+  .entry:hover{background:#f8f8f8;border-color:#c0c0c0;}
+  .entry.selected{outline:2px solid #0055ff;background:#e8f0ff;}
+  .entry .icon{
+    font-family: "Material Symbols Outlined";
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    margin-bottom:8px;
+  }
+  .entry .label{font-size:12px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;width:100%;}
+  .breadcrumbs{padding:6px;border-bottom:1px solid #cfcfcf;background:#f6f6f6;margin-bottom:6px;}
+
+  /* Resolution sizes applied to the parent filelist container */
+  /* Small */
+  .small-icons .entry{width:80px;height:80px;padding:4px;}
+  .small-icons .entry .icon{font-size:18px;}
+  .small-icons .entry .label{font-size:11px;}
+
+  /* Medium (default) */
+  .medium-icons .entry{width:110px;height:110px;padding:6px;}
+  .medium-icons .entry .icon{font-size:36px;}
+  .medium-icons .entry .label{font-size:12px;}
+
+  /* Large */
+  .large-icons .entry{width:150px;height:150px;padding:8px;}
+  .large-icons .entry .icon{font-size:56px;}
+  .large-icons .entry .label{font-size:13px;}
+
+  /* Extra Large */
+  .xlarge-icons .entry{width:200px;height:200px;padding:10px;}
+  .xlarge-icons .entry .icon{font-size:88px;}
+  .xlarge-icons .entry .label{font-size:14px;}
+
+  /* Context menu */
+  .context-menu{
+    position:fixed;background:#fff;border:1px solid #999;padding:6px;display:none;z-index:9999;
+    box-shadow: 4px 4px 6px rgba(0,0,0,0.2);
+  }
+  .context-menu button{display:block;width:240px;text-align:left;padding:6px;border:none;background:none;cursor:pointer;}
+  .context-menu button:hover{background:#eee;}
+
+  /* Modal editor */
+  .modal{
+    position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:10000;
+    background:#fff;border:2px solid #888;padding:12px;display:none;width:760px;height:520px;box-shadow:8px 8px 0 rgba(0,0,0,0.2);
+  }
+  .modal textarea{width:100%;height:calc(100% - 40px);font-family:monospace;font-size:13px;}
+
+  /* Viewer window (98.css like) */
+  .viewer-window{
+    position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:11000;
+    display:none;width:760px;height:520px;border:2px solid #666;background:#fff;box-shadow:8px 8px 0 rgba(0,0,0,0.2);
+  }
+  .viewer-body{padding:10px;height:calc(100% - 36px);overflow:auto;display:flex;align-items:center;justify-content:center;}
+  .viewer-body img{max-width:100%;max-height:100%;}
+  .viewer-body video, .viewer-body audio{max-width:100%;}
+
+  /* footer */
+  .footer{padding:6px;border-top:1px solid #cfcfcf;background:#f6f6f6;text-align:left;font-size:13px;}
+
+  .dropzone{border:2px dashed #cfcfcf;padding:8px;text-align:center;color:#666;border-radius:4px;margin-bottom:6px;}
+  .small{font-size:12px;color:var(--muted);}
+</style>
+</head>
+<body>
+
+<div id="app" role="application" aria-label="MEOS File Manager">
+  <!-- Windows 95 style menu bar -->
+  <div class="menubar-95" role="menubar" aria-label="Application Menu">
+    <div class="menu">File</div>
+    <div class="menu">Edit</div>
+    <div class="menu">View</div>
+    <div class="menu">Tools</div>
+    <div class="menu">Help</div>
+  </div>
+  <div class="toolbar">
+    <div class="group">
+      <div class="btn" id="btn-back" title="Up (go to parent)"><span class="material-symbols-outlined">arrow_upward</span>Up</div>
+      <label class="btn" title="Upload files">
+        <span class="material-symbols-outlined">upload_file</span> Upload
+        <input id="fileInput" type="file" multiple>
+      </label>
+      <div class="btn" id="btn-new-folder"><span class="material-symbols-outlined">create_new_folder</span>New Folder</div>
+      <div class="btn" id="btn-new-file"><span class="material-symbols-outlined">note_add</span>New File</div>
+    </div>
+
+    <div class="group">
+      <div class="btn" id="btn-cut"><span class="material-symbols-outlined">content_cut</span>Cut</div>
+      <div class="btn" id="btn-copy"><span class="material-symbols-outlined">content_copy</span>Copy</div>
+      <div class="btn" id="btn-paste"><span class="material-symbols-outlined">content_paste</span>Paste</div>
+      <div class="btn" id="btn-delete"><span class="material-symbols-outlined">delete</span>Delete</div>
+      
+<div class="btn" id="btn-rename"><span class="material-symbols-outlined">drive_file_rename_outline</span>Rename</div>
+<div class="btn" id="btn-extract"><span class="material-symbols-outlined">folder_zip</span>Extract</div>
+<div class="btn" id="btn-extract-all"><span class="material-symbols-outlined">unarchive</span>Extract All</div>
+
+    </div>
+
+    <div style="flex:1"></div>
+
+    <!-- View filters & resolution -->
+    <div class="group" style="align-items:center;">
+      <label class="small" style="margin-right:6px;">Filter:</label>
+      <select id="filterSelect" title="Filter by type">
+        <option value="all">All</option>
+        <option value="image">Images</option>
+        <option value="audio">Audio</option>
+        <option value="video">Video</option>
+        <option value="document">Documents</option>
+        <option value="others">Others</option>
+      </select>
+
+      <label class="small" style="margin-left:12px;margin-right:6px;">View:</label>
+      <select id="resolutionSelect" title="Icon size">
+        <option value="small">Small</option>
+        <option value="medium" selected>Medium</option>
+        <option value="large">Large</option>
+        <option value="xlarge">Extra Large</option>
+      </select>
+    </div>
+
+    <div style="width:12px"></div>
+
+    <div class="group">
+      <div class="btn" id="btn-export"><span class="material-symbols-outlined">download</span>Export</div>
+      <label class="btn" title="Import JSON">
+        <span class="material-symbols-outlined">upload</span> Import
+        <input id="importJson" type="file" accept=".json">
+      </label>
+      <div class="btn" id="btn-fullscreen"><span class="material-symbols-outlined">fullscreen</span>Fullscreen</div>
+      <div class="btn" id="btn-empty-recycle" title="Empty Recycle Bin"><span class="material-symbols-outlined">delete_forever</span>Empty Bin</div>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="pane left">
+      <div class="dropzone" id="left-drop">Drag files here to upload</div>
+      <div class="tree" id="treeRoot" tabindex="0" aria-label="Directory Tree"></div>
+      <div class="small" style="margin-top:6px">Tip: Right-click items for context menu. Double-click to open. Press <code>F2</code> to rename.</div>
+    </div>
+
+    <div class="pane right">
+      <div class="breadcrumbs" id="breadcrumbs">/</div>
+      <div id="fileList" class="filelist medium-icons" aria-label="Files"></div>
+      <div class="footer" id="status">MEOS File Manager — Ready</div>
+    </div>
+  </div>
+</div>
+
+<!-- context menu -->
+<div id="ctx" class="context-menu" role="menu">
+  <button data-cmd="open">Open</button>
+  <button data-cmd="view">View / Edit</button>
+  <button data-cmd="newfile">New File</button>
+  <button data-cmd="newfolder">New Folder</button>
+  <button data-cmd="cut">Cut</button>
+  <button data-cmd="copy">Copy</button>
+  <button data-cmd="paste">Paste</button>
+  <button data-cmd="rename">Rename</button>
+  <button data-cmd="properties">Properties</button>
+  <button data-cmd="delete">Delete</button>
+
+  <button data-cmd="restore">Restore (from bin)</button>
+  <button data-cmd="extract">Extract</button>
+  <button data-cmd="extractAll">Extract All</button>
+
+</div>
+
+<!-- editor modal -->
+<div id="editor" class="modal" role="dialog" aria-modal="true" aria-label="File Editor">
+  <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+    <strong id="editorName">untitled.txt</strong>
+    <div style="flex:1"></div>
+    <button id="btn-save" class="btn">Save</button>
+    <button id="btn-close" class="btn">Close</button>
+  </div>
+  <textarea id="editorArea" spellcheck="false"></textarea>
+</div>
+
+<!-- viewer window -->
+<div id="viewerWindow" class="viewer-window" role="dialog" aria-modal="true" aria-label="File Viewer">
+  <div style="display:flex;align-items:center;justify-content:space-between;padding:6px;border-bottom:1px solid #ddd;background:#f1f1f1;">
+    <div style="font-weight:600" id="viewerTitle">Viewer</div>
+    <div>
+      <button id="viewerClose" class="btn" title="Close">Close</button>
+    </div>
+  </div>
+  <div class="viewer-body" id="viewerBody">
+    <!-- dynamic content -->
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script>
+/* MEOS File Manager - Final integrated with filters & viewer */
+
+// Utilities
+const uid = () => Math.random().toString(36).slice(2,9);
+const now = () => new Date().toISOString();
+const RECYCLE = '/__RECYCLE_BIN__';
+const RES_KEY = 'meos-res';
+const FILTER_KEY = 'meos-filter';
+
+// File type mapping
+const fileTypes = {
+  audio: ["mp3","wav","ogg","m4a","flac"],
+  video: ["mp4","webm","ogv","mov","mkv","avi"],
+  image: ["jpg","jpeg","png","gif","bmp","webp","svg"],
+  document: ["txt","md","pdf","doc","docx","xls","xlsx","ppt","pptx","rtf","csv","json","html","js","css"]
+};
+function detectType(name){
+  const ext = (name.split('.').pop() || '').toLowerCase();
+  if(!ext) return 'others';
+  for(const k of Object.keys(fileTypes)){
+    if(fileTypes[k].includes(ext)) return k;
+  }
+  return 'others';
+}
+
+// VFS class
+class VFS {
+  constructor(){ this.load(); }
+  load(){
+    const raw = localStorage.getItem('meos-fs');
+    if(raw){
+      try{ this.root = JSON.parse(raw); return; }catch(e){ console.error('parse error', e); }
+    }
+    this.root = { type:'dir', name:'', id:uid(), mtime:now(), children:[] };
+    this.mkdir('/', 'Program Files');
+    this.mkdir('/', 'Windows');
+    this.mkdir('/', 'Users');
+
+    // --- Added System & System32 with placeholder files ---
+    // --- Added Windows/System & Windows/System32 with versioned placeholder files (Windows 10 -> Windows 95) ---
+    this.mkdir('/Windows', 'System');
+    this.mkdir('/Windows/System', 'System32');
+
+    const winVersions = ['Windows XP','Windows ME','Windows 2000', 'Windows 98','Windows 95'];
+    const versionFiles = {
+      'Windows 10': ['ntoskrnl.exe','kernel32.dll','user32.dll','kernelbase.dll','win32k.sys','explorer.exe','services.exe','lsass.exe'],
+      'Windows 8.1': ['ntoskrnl.exe','kernel32.dll','user32.dll','win32k.sys','explorer.exe','shell32.dll'],
+      'Windows 7': ['ntoskrnl.exe','kernel32.dll','user32.dll','shell32.dll','explorer.exe','wininit.exe'],
+      'Windows XP': ['ntoskrnl.exe','kernel32.dll','user32.dll','shell32.dll','winlogon.exe','explorer.exe'],
+      'Windows 98': ['io.sys','msdos.sys','command.com','shell32.dll','explorer.exe'],
+      'Windows 95': ['io.sys','msdos.sys','command.com','win.com','progman.exe']
+    };
+
+    // create versioned folders and placeholder files
+    for(const v of winVersions){
+      const vfolder = 'Windows ' + v.split(' ')[1]; // simple unique name like "Windows 10"
+      this.mkdir('/Windows/System', vfolder);
+      this.mkdir('/Windows/System/' + vfolder, 'System32');
+      const files = versionFiles[v];
+      for(const f of files){
+        const path = '/Windows/System/' + vfolder + '/System32';
+        this.writeFile(path, f, 'Placeholder for ' + f + ' (' + v + ')', 'text/plain');
+      }
+    }
+
+    this.mkdir('/', 'System');
+    this.mkdir('/System', 'System32');
+
+    // System folder files
+    this.writeFile('/System', 'COMMAND.COM', 'Placeholder for COMMAND.COM', 'text/plain');
+    this.writeFile('/System', 'IO.SYS', 'Placeholder for IO.SYS', 'text/plain');
+    this.writeFile('/System', 'MSDOS.SYS', 'Placeholder for MSDOS.SYS', 'text/plain');
+    this.writeFile('/System', 'CONFIG.SYS', 'DEVICE=HIMEM.SYS\nDOS=HIGH,UMB\nFILES=30', 'text/plain');
+    this.writeFile('/System', 'AUTOEXEC.BAT', 'PATH=C:\\DOS\nPROMPT $P$G', 'text/plain');
+
+    // System32 folder files
+    this.writeFile('/System/System32', 'KRNL386.EXE', 'Kernel placeholder', 'text/plain');
+    this.writeFile('/System/System32', 'GDI.EXE', 'GDI placeholder', 'text/plain');
+    this.writeFile('/System/System32', 'USER.EXE', 'User placeholder', 'text/plain');
+    this.writeFile('/System/System32', 'SHELL.DLL', 'Shell DLL placeholder', 'text/plain');
+    this.writeFile('/System/System32', 'SYSTEM.INI', '[boot]\nshell=progman.exe', 'text/plain');
+    this.mkdir('/', RECYCLE.slice(1));
+    this.save();
+  }
+  save(){ localStorage.setItem('meos-fs', JSON.stringify(this.root)); }
+  find(path){
+    path = normalizePath(path);
+    if(path==='/' ) return this.root;
+    let parts = path.split('/').filter(Boolean);
+    let node = this.root;
+    for(let p of parts){
+      if(!node.children) return null;
+      node = node.children.find(c=>c.name===p);
+      if(!node) return null;
+    }
+    return node;
+  }
+  readdir(path){
+    const n = this.find(path);
+    if(!n || n.type!=='dir') return null;
+    const arr = n.children.slice();
+    arr.sort((a,b)=>{
+      if(a.type !== b.type) return a.type==='dir' ? -1 : 1;
+      return a.name.localeCompare(b.name, undefined, {sensitivity:'base'});
+    });
+    return arr;
+  }
+  mkdir(p, name){
+    const parent = this.find(p);
+    if(!parent || parent.type!=='dir') throw new Error('Parent not found');
+    if(parent.children.find(c=>c.name===name)) name = uniqueName(parent, name);
+    const node = { type:'dir', name, id:uid(), mtime:now(), children:[] };
+    parent.children.push(node); this._touch(parent); this.save(); return node;
+  }
+  writeFile(p, name, content, mime='text/plain'){
+    const parent = this.find(p);
+    if(!parent || parent.type!=='dir') throw new Error('Parent not found');
+    let existing = parent.children.find(c=>c.name===name);
+    if(existing){
+      existing.content = content; existing.mime = mime; existing.mtime = now(); this._touch(parent);
+      this.save(); return existing;
+    }
+    const node = { type:'file', name, id:uid(), content, mime, mtime:now()};
+    parent.children.push(node); this._touch(parent); this.save(); return node;
+  }
+  rm(path){
+    const norm = normalizePath(path);
+    if(norm === '/') return false;
+    const parts = norm.split('/').filter(Boolean);
+    const name = parts.pop();
+    const parentPath = '/' + parts.join('/');
+    const parent = this.find(parentPath || '/');
+    if(!parent) return false;
+    const idx = parent.children.findIndex(c=>c.name===name);
+    if(idx===-1) return false;
+    const node = parent.children.splice(idx,1)[0];
+    this._touch(parent); this.save(); return node;
+  }
+  move(srcPath, destDir){
+    const node = this.find(srcPath);
+    if(!node) throw new Error('src missing');
+    const removed = this.rm(srcPath);
+    const dest = this.find(destDir);
+    if(!dest || dest.type!=='dir') throw new Error('dest missing');
+    if(dest.children.find(c=>c.name===node.name)) node.name = uniqueName(dest, node.name);
+    dest.children.push(node); this._touch(dest); this.save();
+    return node;
+  }
+  rename(path, newName){
+    const norm = normalizePath(path);
+    if(norm === '/') throw new Error('Cannot rename root');
+    const parts = norm.split('/').filter(Boolean);
+    const oldName = parts.pop();
+    const parentPath = '/' + parts.join('/');
+    const parent = this.find(parentPath || '/');
+    if(!parent) throw new Error('Parent missing');
+    if(parent.children.find(c=>c.name===newName)) throw new Error('Name exists');
+    const node = parent.children.find(c=>c.name===oldName);
+    if(!node) throw new Error('Node missing');
+    node.name = newName;
+    node.mtime = now();
+    this._touch(parent);
+    this.save();
+    return node;
+  }
+  _touch(node){ if(node) node.mtime = now(); }
+  exportJSON(){ return JSON.stringify(this.root); }
+  importJSON(raw){ this.root = JSON.parse(raw); this.save(); }
+}
+
+// helpers
+function normalizePath(p){
+  if(!p) return '/';
+  if(!p.startsWith('/')) p = '/' + p;
+  if(p.length>1 && p.endsWith('/')) p = p.slice(0,-1);
+  return p;
+}
+function pathJoin(a,b){ return normalizePath((a==='/'? '':a) + '/' + b); }
+function partsOf(path){ return normalizePath(path).split('/').filter(Boolean); }
+function basename(path){ let p = normalizePath(path); if(p === '/') return '/'; let pts = p.split('/'); return pts[pts.length-1]; }
+function uniqueName(dirNode, name){
+  let base = name, ext = '';
+  const dot = name.lastIndexOf('.');
+  if(dot>0){ base = name.slice(0,dot); ext = name.slice(dot); }
+  let idx = 1;
+  while(dirNode.children.find(c=>c.name=== (base + ' ('+idx+')' + ext) )) idx++;
+  return base + ' ('+idx+')' + ext;
+}
+
+// app state
+const vfs = new VFS();
+let cwd = '/';
+let selected = null;
+let clipboard = { mode:null, path:null };
+const app = document.getElementById('app');
+
+// dom refs
+const treeRoot = document.getElementById('treeRoot');
+const fileList = document.getElementById('fileList');
+const breadcrumbs = document.getElementById('breadcrumbs');
+const fileInput = document.getElementById('fileInput');
+const importJson = document.getElementById('importJson');
+const status = document.getElementById('status');
+const ctx = document.getElementById('ctx');
+const editor = document.getElementById('editor');
+const editorArea = document.getElementById('editorArea');
+const editorName = document.getElementById('editorName');
+const btnRename = document.getElementById('btn-rename');
+const resSelect = document.getElementById('resolutionSelect');
+const filterSelect = document.getElementById('filterSelect');
+const viewerWindow = document.getElementById('viewerWindow');
+const viewerBody = document.getElementById('viewerBody');
+const viewerTitle = document.getElementById('viewerTitle');
+const viewerClose = document.getElementById('viewerClose');
+
+function setStatus(t){ status.textContent = 'MEOS File Manager — ' + t; }
+
+// resolution
+const RES_MAP = { small: 'small-icons', medium: 'medium-icons', large: 'large-icons', xlarge: 'xlarge-icons' };
+function applyResolution(resKey){ const classes = Object.values(RES_MAP); fileList.classList.remove(...classes); const cls = RES_MAP[resKey] || RES_MAP.medium; fileList.classList.add(cls); localStorage.setItem(RES_KEY, resKey); }
+function loadResolution(){ const saved = localStorage.getItem(RES_KEY) || 'medium'; if(resSelect) resSelect.value = saved; applyResolution(saved); }
+resSelect.addEventListener('change', (e)=> applyResolution(e.target.value));
+loadResolution();
+
+// filter
+function applyFilter(f){
+  localStorage.setItem(FILTER_KEY, f);
+  // re-render (renderFiles uses filter value)
+  renderFiles();
+}
+function loadFilter(){ const s = localStorage.getItem(FILTER_KEY) || 'all'; filterSelect.value = s; applyFilter(s); }
+filterSelect.addEventListener('change',(e)=> applyFilter(e.target.value));
+loadFilter();
+
+// render tree
+function renderTree(){
+  treeRoot.innerHTML = '';
+  function createNode(node, path, container, level=0){
+    const li = document.createElement('div');
+    li.style.paddingLeft = (level*12) + 'px';
+    li.style.display='flex'; li.style.alignItems='center'; li.style.gap='6px';
+    const hasChildren = node.children && node.children.length;
+    const toggle = document.createElement('span'); toggle.textContent = hasChildren ? '▾' : '▸';
+    toggle.style.width='16px';
+    const name = document.createElement('div'); name.textContent = node.name || '/';
+    name.style.cursor='pointer';
+    li.appendChild(toggle); li.appendChild(name);
+    container.appendChild(li);
+
+    name.addEventListener('click', ()=>{ cwd = path; selected = null; render(); });
+    name.addEventListener('contextmenu', (e)=>{ e.preventDefault(); showContext(e.pageX,e.pageY, path); });
+
+    if(hasChildren){
+      node.children.forEach(child=>{
+        if(child.type==='dir') createNode(child, pathJoin(path, child.name), container, level+1);
+      });
+    }
+  }
+  createNode(vfs.root, '/', treeRoot, 0);
+}
+
+// render files with filtering
+function renderFiles(){
+  fileList.innerHTML = '';
+  breadcrumbs.textContent = cwd;
+  const filter = localStorage.getItem(FILTER_KEY) || 'all';
+  const entries = vfs.readdir(cwd) || [];
+  for(const e of entries){
+    const ftype = e.type === 'dir' ? 'dir' : detectType(e.name);
+    if(filter !== 'all' && ftype !== filter) continue;
+    const card = document.createElement('div'); card.className='entry'; card.dataset.name=e.name; card.dataset.type=ftype;
+    const icon = document.createElement('div'); icon.className='icon';
+    icon.textContent = e.type === 'dir' ? 'folder' : iconForName(e.name);
+    const txt = document.createElement('div'); txt.className='label'; txt.textContent=e.name;
+    card.appendChild(icon); card.appendChild(txt);
+    fileList.appendChild(card);
+
+    const fullPath = pathJoin(cwd, e.name);
+    card.addEventListener('dblclick', ()=>{
+      if(e.type==='dir'){ cwd = fullPath; selected = null; render(); }
+      else openInViewer(fullPath);
+    });
+
+    card.addEventListener('click', ()=>{
+      if(selected === fullPath){ selected = null; card.classList.remove('selected'); }
+      else { selected = fullPath; Array.from(fileList.children).forEach(n=>n.classList.remove('selected')); card.classList.add('selected'); }
+    });
+
+    card.addEventListener('contextmenu', (ev)=>{
+      ev.preventDefault();
+      selected = fullPath;
+      Array.from(fileList.children).forEach(n=>n.classList.remove('selected'));
+      card.classList.add('selected');
+      showContext(ev.pageX, ev.pageY, fullPath);
+    });
+  }
+}
+
+// icon helper
+function iconForName(name){
+  const ext = name.split('.').pop().toLowerCase();
+  const map = {txt:'description',md:'description',js:'code',html:'language',png:'image',jpg:'image',jpeg:'image',gif:'image',pdf:'picture_as_pdf',zip:'folder_zip',exe:'terminal',mp3:'music_note',wav:'audiotrack',mp4:'videocam',mov:'videocam'};
+  return map[ext] || 'insert_drive_file';
+}
+
+// context menu
+function showContext(x,y,targetPath){
+  ctx.style.left = x + 'px'; ctx.style.top = y + 'px'; ctx.style.display = 'block';
+  const node = vfs.find(targetPath) || null;
+  Array.from(ctx.querySelectorAll('button')).forEach(btn=>{
+    const cmd = btn.dataset.cmd;
+    btn.disabled = false;
+    if(cmd==='restore' && !isInRecycleBin(targetPath)) btn.disabled = true;
+    if(cmd==='paste' && !clipboard.mode) btn.disabled = true;
+    if(cmd==='open' && !node) btn.disabled = true;
+    if(cmd==='rename' && !node) btn.disabled = true;
+  });
+  ctx.onclickHandler = (e)=>{
+    if(e.target.tagName !== 'BUTTON') return;
+    const cmd = e.target.dataset.cmd;
+    ctx.style.display='none';
+    handleCtxCmd(cmd, targetPath);
+  };
+  ctx.addEventListener('click', ctx.onclickHandler);
+}
+function hideContext(){ ctx.style.display='none'; ctx.removeEventListener('click', ctx.onclickHandler); }
+
+// context actions
+function handleCtxCmd(cmd, targetPath){
+  if(cmd==='open'){
+    const node = vfs.find(targetPath);
+    if(node && node.type==='dir'){ cwd = targetPath; render(); } else openInViewer(targetPath);
+  } else if(cmd==='view') openFileEditor(targetPath);
+  else if(cmd==='newfolder'){ vfs.mkdir(targetPath, 'New Folder'); render(); }
+  else if(cmd==='newfile'){ vfs.writeFile(targetPath, 'untitled.txt', '', 'text/plain'); render(); }
+  else if(cmd==='cut'){ clipboard.mode='cut'; clipboard.path=targetPath; setStatus('Cut to clipboard: ' + basename(targetPath)); }
+  else if(cmd==='copy'){ clipboard.mode='copy'; clipboard.path=targetPath; setStatus('Copied to clipboard: ' + basename(targetPath)); }
+  else if(cmd==='paste'){ pasteTo(targetPath); }
+  else if(cmd==='rename'){ promptRename(targetPath); }
+  else if(cmd==='properties'){ showProperties(targetPath); }
+  else if(cmd==='delete'){ performDelete(targetPath); }
+  else if(cmd==='restore'){ restoreFromBin(targetPath); }
+  else if(cmd==='extract'){ extractZip(targetPath, false); }
+  else if(cmd==='extractAll'){ extractZip(targetPath, true); }
+}
+
+// paste
+function pasteTo(targetPath){
+  const dest = vfs.find(targetPath);
+  if(!dest || dest.type!=='dir'){ setStatus('Paste: target must be a folder'); return; }
+  if(!clipboard.path){ setStatus('Clipboard empty'); return; }
+  const node = vfs.find(clipboard.path);
+  if(!node){ setStatus('Source missing'); return; }
+  const deepCopy = JSON.parse(JSON.stringify(node));
+  if(dest.children.find(c=>c.name === deepCopy.name)) deepCopy.name = uniqueName(dest, deepCopy.name);
+  dest.children.push(deepCopy);
+  if(clipboard.mode==='cut'){ vfs.rm(clipboard.path); clipboard.mode = null; clipboard.path = null; }
+  vfs.save(); render(); setStatus('Pasted ' + deepCopy.name);
+}
+
+// delete -> move to recycle bin or permanent if already in bin
+function performDelete(pathToDelete){
+  const node = vfs.find(pathToDelete);
+  if(!node){ setStatus('Nothing to delete'); return; }
+  if(isInRecycleBin(pathToDelete)){ vfs.rm(pathToDelete); setStatus('Permanently deleted ' + basename(pathToDelete)); }
+  else { const moved = vfs.move(pathToDelete, RECYCLE); setStatus('Moved to Recycle Bin: ' + moved.name); }
+  render();
+}
+function isInRecycleBin(p){ return normalizePath(p).startsWith(RECYCLE); }
+
+// restore
+function restoreFromBin(pathInBin){
+  if(!isInRecycleBin(pathInBin)){ setStatus('Not in recycle bin'); return; }
+  const node = vfs.find(pathInBin);
+  if(!node){ setStatus('Missing'); return; }
+  const moved = vfs.move(pathInBin, '/');
+  setStatus('Restored: ' + moved.name);
+  render();
+}
+
+// open file editor (for text files)
+function openFileEditor(fullPath){
+  const node = vfs.find(fullPath);
+  if(!node) return setStatus('File not found');
+  if(node.type === 'dir'){ cwd = fullPath; render(); return; }
+  // if content is data URL and textual, try to decode for editing
+  editorName.textContent = node.name;
+  // if it's a data URL of text, decode; else if it's base64 of binary we show raw (not ideal)
+  if(node.content && node.content.startsWith('data:') && node.content.indexOf(';base64,')>0){
+    // attempt to decode if mime is text/*
+    const mime = node.content.slice(5, node.content.indexOf(';'));
+    if(mime.startsWith('text') || mime.includes('json') || mime.includes('xml') || mime.includes('html')){
+      try{
+        const base64 = node.content.split(';base64,')[1];
+        const txt = atob(base64);
+        editorArea.value = txt;
+        editor.dataset.encoding = 'base64text';
+      } catch(e){ editorArea.value = ''; editor.dataset.encoding = ''; }
+    } else {
+      editorArea.value = '';
+      editor.dataset.encoding = '';
+    }
+  } else {
+    editorArea.value = node.content || '';
+    editor.dataset.encoding = '';
+  }
+  editor.style.display = 'block';
+  editor.dataset.path = fullPath;
+  editorArea.focus();
+}
+
+// save editor
+document.getElementById('btn-save').onclick = ()=>{
+  const p = editor.dataset.path;
+  const node = vfs.find(p);
+  if(node && node.type==='file'){
+    if(editor.dataset.encoding === 'base64text'){
+      // re-encode preserving mime
+      const mime = (node.content||'').slice(5, (node.content||'').indexOf(';'));
+      const b64 = btoa(editorArea.value);
+      node.content = `data:${mime};base64,${b64}`;
+    } else {
+      node.content = editorArea.value;
+    }
+    node.mtime = (new Date()).toISOString();
+    vfs.save();
+    setStatus('Saved ' + node.name);
+  }
+};
+
+// close editor
+document.getElementById('btn-close').onclick = ()=>{ editor.style.display = 'none'; };
+
+// new file/folder
+document.getElementById('btn-new-folder').onclick = ()=>{ vfs.mkdir(cwd, 'New Folder'); render(); };
+document.getElementById('btn-new-file').onclick = ()=>{ vfs.writeFile(cwd, 'untitled.txt',''); render(); };
+
+// cut/copy/paste/delete toolbar
+document.getElementById('btn-cut').onclick = ()=>{
+  if(!selected){ setStatus('Select an item first'); return; }
+  clipboard.mode='cut'; clipboard.path=selected; setStatus('Cut: ' + basename(selected));
+};
+document.getElementById('btn-copy').onclick = ()=>{
+  if(!selected){ setStatus('Select an item first'); return; }
+  clipboard.mode='copy'; clipboard.path=selected; setStatus('Copy: ' + basename(selected));
+};
+document.getElementById('btn-paste').onclick = ()=>{ pasteTo(cwd); };
+document.getElementById('btn-delete').onclick = ()=>{ if(!selected){ setStatus('Select an item first'); return; } performDelete(selected); };
+
+// Rename
+btnRename.onclick = ()=>{ if(!selected){ setStatus('Select an item first'); return; } promptRename(selected); };
+function promptRename(pathToRename){
+  const node = vfs.find(pathToRename);
+  if(!node) return setStatus('No item to rename');
+  const current = node.name;
+  const newName = prompt('Rename "' + current + '" to:', current);
+  if(newName && newName.trim() && newName !== current){
+    try{
+      vfs.rename(pathToRename, newName.trim());
+      setStatus('Renamed to ' + newName.trim());
+      // reset cwd to parent for safety if folder renamed
+      const parent = '/' + partsOf(pathToRename).slice(0,-1).join('/');
+      cwd = parent || '/';
+      selected = null;
+      render();
+    } catch(err){ alert('Rename failed: ' + (err.message || err)); }
+  }
+}
+
+// keyboard shortcuts
+document.addEventListener('keydown', (e)=>{
+  if(e.key === 'F2' && selected){ promptRename(selected); }
+  else if(e.key === 'Delete' && selected){ performDelete(selected); }
+  else if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='c' && selected){ clipboard.mode='copy'; clipboard.path=selected; setStatus('Copy: ' + basename(selected)); }
+  else if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='x' && selected){ clipboard.mode='cut'; clipboard.path=selected; setStatus('Cut: ' + basename(selected)); }
+  else if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='v'){ pasteTo(cwd); }
+});
+
+// upload handling (store as data URL)
+fileInput.addEventListener('change', async (e)=>{
+  const files = Array.from(e.target.files);
+  for(const f of files){
+    const base64 = await fileToDataURL(f);
+    vfs.writeFile(cwd, f.name, base64, f.type || 'application/octet-stream');
+  }
+  render();
+  fileInput.value='';
+  setStatus('Uploaded ' + files.length + ' file(s)');
+});
+
+function fileToDataURL(file){
+  return new Promise((res, rej)=>{
+    const reader = new FileReader();
+    reader.onload = ()=> res(reader.result);
+    reader.onerror = ()=> rej(reader.error);
+    reader.readAsDataURL(file);
+  });
+}
+
+// drag & drop upload
+const leftDrop = document.getElementById('left-drop');
+leftDrop.addEventListener('dragover', e=>{ e.preventDefault(); leftDrop.style.borderColor='#888'; });
+leftDrop.addEventListener('dragleave', e=>{ leftDrop.style.borderColor='#cfcfcf'; });
+leftDrop.addEventListener('drop', async (e)=>{
+  e.preventDefault(); leftDrop.style.borderColor='#cfcfcf';
+  const items = Array.from(e.dataTransfer.files);
+  for(const f of items){
+    const base64 = await fileToDataURL(f);
+    vfs.writeFile(cwd, f.name, base64, f.type || 'application/octet-stream');
+  }
+  render();
+  setStatus('Dropped ' + items.length + ' file(s)');
+});
+
+// export/import
+document.getElementById('btn-export').onclick = ()=>{
+  const data = vfs.exportJSON();
+  const blob = new Blob([data], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href=url; a.download='meos-fs.json'; a.click();
+  URL.revokeObjectURL(url);
+  setStatus('Exported filesystem');
+};
+importJson.addEventListener('change', async (e)=>{
+  const f = e.target.files[0];
+  if(!f) return;
+  const txt = await f.text();
+  try{ vfs.importJSON(txt); render(); setStatus('Imported file system'); } catch(err){ setStatus('Import failed'); }
+  importJson.value='';
+});
+
+// empty recycle
+document.getElementById('btn-empty-recycle').onclick = ()=>{
+  const bin = vfs.find(RECYCLE);
+  if(!bin) return;
+  bin.children = [];
+  vfs.save(); render(); setStatus('Emptied Recycle Bin');
+};
+
+// fullscreen
+document.getElementById('btn-fullscreen').onclick = ()=>{
+  if(!document.fullscreenElement) app.requestFullscreen();
+  else document.exitFullscreen();
+};
+
+// click outside hide context menu
+document.addEventListener('click', (e)=>{ if(!ctx.contains(e.target)) ctx.style.display='none'; });
+
+// properties
+function showProperties(path){
+  const node = vfs.find(path);
+  if(!node) return setStatus('No properties');
+  const info = [
+    ['Name', node.name],
+    ['Type', node.type],
+    ['Path', normalizePath(path)],
+    ['Modified', node.mtime || '—'],
+    ['Size', node.type==='file' ? ((node.content||'').length + ' bytes (approx)') : (node.children? node.children.length + ' items':'0 items')]
+  ];
+  alert(info.map(r=>r[0]+': '+r[1]).join('\n'));
+}
+
+// viewer: open files in a viewer window
+function openInViewer(fullPath){
+  const node = vfs.find(fullPath);
+  if(!node) return setStatus('File not found');
+  if(node.type === 'dir'){ cwd = fullPath; render(); return; }
+  const type = detectType(node.name);
+  viewerTitle.textContent = node.name;
+  viewerBody.innerHTML = '';
+  // node.content should be data:...;base64,... if uploaded / saved as binary
+  const src = node.content || '';
+  try{
+    if(type === 'image'){
+      const img = document.createElement('img'); img.src = src; viewerBody.appendChild(img);
+    } else if(type === 'audio'){
+      const a = document.createElement('audio'); a.controls=true; a.src = src; viewerBody.appendChild(a);
+    } else if(type === 'video'){
+      const v = document.createElement('video'); v.controls=true; v.src = src; v.style.maxWidth='100%'; viewerBody.appendChild(v);
+    } else if(type === 'document'){
+      // common docs: text/plain or markdown stored as raw string or data URL
+      if(src.startsWith('data:')){
+        const mime = src.slice(5, src.indexOf(';'));
+        if(mime === 'application/pdf'){
+          const embed = document.createElement('embed'); embed.type = 'application/pdf'; embed.src = src; embed.style.width='100%'; embed.style.height='100%';
+          viewerBody.appendChild(embed);
+        } else if(mime.startsWith('text') || mime.includes('json') || mime.includes('html')){
+          // decode base64 if necessary
+          if(src.indexOf(';base64,')>0){
+            const b64 = src.split(';base64,')[1];
+            const txt = atob(b64);
+            const pre = document.createElement('pre'); pre.style.whiteSpace='pre-wrap'; pre.textContent = txt;
+            viewerBody.appendChild(pre);
+          } else {
+            const txt = src.split(',')[1] || '';
+            const pre = document.createElement('pre'); pre.style.whiteSpace='pre-wrap'; pre.textContent = decodeURIComponent(txt);
+            viewerBody.appendChild(pre);
+          }
+        } else {
+          viewerBody.textContent = 'No preview available for this document type.';
+        }
+      } else {
+        // plain stored text
+        const pre = document.createElement('pre'); pre.style.whiteSpace='pre-wrap'; pre.textContent = src; viewerBody.appendChild(pre);
+      }
+    } else {
+      viewerBody.textContent = 'Preview not available for this file type. You can export & open locally.';
+    }
+  } catch(e){
+    viewerBody.textContent = 'Preview error: ' + (e.message || e);
+  }
+  viewerWindow.style.display = 'block';
+}
+
+// close viewer
+viewerClose.onclick = ()=>{ viewerWindow.style.display = 'none'; };
+
+// click blank deselects
+fileList.addEventListener('click', (e)=>{
+  if(e.target === fileList){ selected = null; Array.from(fileList.children).forEach(n=>n.classList.remove('selected')); }
+});
+
+// render functions
+function render(){
+  renderTree(); renderFiles();
+}
+function renderFiles(){ renderFiles; } // placeholder to satisfy some linters
+
+function renderFiles(){
+  fileList.innerHTML = '';
+  breadcrumbs.textContent = cwd;
+  const filter = localStorage.getItem(FILTER_KEY) || 'all';
+  const entries = vfs.readdir(cwd) || [];
+  for(const e of entries){
+    const ftype = e.type === 'dir' ? 'dir' : detectType(e.name);
+    if(filter !== 'all' && ftype !== filter) continue;
+    const card = document.createElement('div'); card.className='entry'; card.dataset.name=e.name; card.dataset.type=ftype;
+    const icon = document.createElement('div'); icon.className='icon';
+    icon.textContent = e.type === 'dir' ? 'folder' : iconForName(e.name);
+    const txt = document.createElement('div'); txt.className='label'; txt.textContent=e.name;
+    card.appendChild(icon); card.appendChild(txt);
+    fileList.appendChild(card);
+
+    const fullPath = pathJoin(cwd, e.name);
+    card.addEventListener('dblclick', ()=>{
+      if(e.type==='dir'){ cwd = fullPath; selected = null; render(); }
+      else openInViewer(fullPath);
+    });
+
+    card.addEventListener('click', ()=>{
+      if(selected === fullPath){ selected = null; card.classList.remove('selected'); }
+      else { selected = fullPath; Array.from(fileList.children).forEach(n=>n.classList.remove('selected')); card.classList.add('selected'); }
+    });
+
+    card.addEventListener('contextmenu', (ev)=>{
+      ev.preventDefault();
+      selected = fullPath;
+      Array.from(fileList.children).forEach(n=>n.classList.remove('selected'));
+      card.classList.add('selected');
+      showContext(ev.pageX, ev.pageY, fullPath);
+    });
+  }
+}
+
+// initial render & status
+render();
+setStatus('Ready');
+
+// misc helpers
+function iconForName(n){
+  const ext = (n.split('.').pop() || '').toLowerCase();
+  const map = {txt:'description',md:'description',js:'code',html:'language',png:'image',jpg:'image',jpeg:'image',gif:'image',pdf:'picture_as_pdf',zip:'folder_zip',exe:'terminal',mp3:'music_note',wav:'audiotrack',mp4:'videocam',mov:'videocam'};
+  return map[ext] || 'insert_drive_file';
+}
+
+
+// extract zip files
+async function extractZip(path, extractAll){
+  const node = vfs.find(path);
+  if(!node || node.type!=='file'){ setStatus('Not a file'); return; }
+  if(!node.name.toLowerCase().endsWith('.zip')){ setStatus('Not a ZIP archive'); return; }
+
+  try {
+    let data;
+    if(node.content.startsWith('data:')){
+      const b64 = node.content.split(',')[1];
+      data = await JSZip.loadAsync(atob(b64), {base64:true});
+    } else {
+      data = await JSZip.loadAsync(node.content);
+    }
+
+    const destDir = extractAll
+      ? vfs.mkdir(cwd, node.name.replace(/\.zip$/i,''))
+      : vfs.find(cwd);
+
+    for(const [filename, fileObj] of Object.entries(data.files)){
+      if(fileObj.dir){
+        vfs.mkdir(destDir ? pathJoin(cwd, destDir.name) : cwd, filename);
+      } else {
+        const content = await fileObj.async("base64");
+        const mime = "application/octet-stream";
+        const targetPath = destDir ? pathJoin(cwd, destDir.name) : cwd;
+        vfs.writeFile(targetPath, filename, "data:"+mime+";base64,"+content, mime);
+      }
+    }
+
+    vfs.save();
+    render();
+    setStatus(`Extracted ${node.name}`);
+  } catch(err){
+    console.error(err);
+    setStatus('Extract failed: ' + err.message);
+  }
+}
+
+// toolbar extract buttons
+document.getElementById('btn-extract').onclick = ()=>{
+  if(!selected){ setStatus('Select a .zip file first'); return; }
+  const node = vfs.find(selected);
+  if(!node || node.type!=='file' || !node.name.toLowerCase().endsWith('.zip')){
+    setStatus('Not a valid ZIP archive');
+    return;
+  }
+  extractZip(selected, false);
+};
+
+document.getElementById('btn-extract-all').onclick = ()=>{
+  if(!selected){ setStatus('Select a .zip file first'); return; }
+  const node = vfs.find(selected);
+  if(!node || node.type!=='file' || !node.name.toLowerCase().endsWith('.zip')){
+    setStatus('Not a valid ZIP archive');
+    return;
+  }
+  extractZip(selected, true);
+};
+
+
+// persist before unload
+window.addEventListener('beforeunload', ()=> vfs.save() );
+</script>
+</body>
+</html>

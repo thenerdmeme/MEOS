@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Boot</title>
+  <link rel="stylesheet" href="98.css">
+  <link rel="icon" type="image/png" href="MEOS.png">
+  <style>
+    body {
+      background: black;
+      color: white;
+      font-family: monospace;
+      font-size: 16px;
+      line-height: 1.4em;
+      padding: 20px;
+      overflow: hidden;
+    }
+    .logo {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      text-align: center;
+    }
+    .logo img {
+      width: 100px;
+      display: block;
+      margin: auto;
+    }
+    .hidden { display: none; }
+    .blink {
+      animation: blink 1s step-start infinite;
+    }
+    @keyframes blink {
+      50% { opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="logo">
+    <img src="wizardstar.png" alt="Wizard Star Logo">
+  </div>
+
+  <pre id="boot-text"></pre>
+  <div id="continue" class="hidden">
+    <span class="blink">Press F1, Enter, or Click to continue...</span>
+    <div id="countdown" style="color:yellow; font-weight:bold; margin-top:5px;"></div>
+  </div>
+
+  <script>
+    const bootLines = [
+      "Wizard Modular BIOS v4.51PG, An Apprentice's Ally",
+      "Copyright (C) 1995-1996, 1996-1997, 1997-2000, 2000-2001, 2025 MagicME, Inc.",
+      "MEOS 1.0 2025",
+      "Pentium III-MMX CPU at 194 MHz",
+      "Memory Test: MagicME, Inc.",
+      "",
+      "Detecting IDE Primary Master ... MEOS_VIRTUAL",
+      "Detecting IDE Primary Slave  ... None",
+      "Detecting IDE Secondary Master... None",
+      "Detecting IDE Secondary Slave  ... None",
+      "",
+      "Floppy disk(s) fail (40)",
+      "CMOS checksum error - Defaults loaded",
+      "",
+      "MEOS Booting..."
+    ];
+
+    const bootText = document.getElementById("boot-text");
+    const continueDiv = document.getElementById("continue");
+    const countdownEl = document.getElementById("countdown");
+    let i = 0;
+    let autoContinueTimer;
+    let countdownTimer;
+    let seconds = 5;
+    let paused = false;
+
+    function goNext() {
+      clearTimeout(autoContinueTimer);
+      clearInterval(countdownTimer);
+      window.location.href = "index_bootmenu.html";
+    }
+
+    function updateCountdownDisplay() {
+      countdownEl.textContent = paused 
+        ? `Countdown paused. Press F1, Enter, or Click to continue...` 
+        : `Auto-continue in ${seconds} seconds...`;
+
+      if (!paused && seconds === 1) {
+        countdownEl.classList.add("blink");
+        countdownEl.style.color = "red";
+      }
+    }
+
+    function startCountdown() {
+      updateCountdownDisplay();
+      countdownTimer = setInterval(() => {
+        if (!paused) {
+          seconds--;
+          if (seconds > 0) {
+            updateCountdownDisplay();
+          } else {
+            goNext();
+          }
+        }
+      }, 1000);
+
+      autoContinueTimer = setTimeout(goNext, seconds * 1000);
+    }
+
+    function typeLine() {
+      if (i < bootLines.length) {
+        bootText.textContent += bootLines[i] + "\n";
+        i++;
+        setTimeout(typeLine, 500);
+      } else {
+        continueDiv.classList.remove("hidden");
+        startCountdown();
+
+        // Handle key presses
+        document.addEventListener("keydown", function(event) {
+          if (event.key === "F1" || event.key === "Enter") {
+            goNext();
+          } else {
+            if (!paused) {
+              paused = true;
+              clearTimeout(autoContinueTimer);
+              updateCountdownDisplay();
+            }
+          }
+        });
+
+        // Allow clicking anywhere
+        document.addEventListener("click", goNext);
+      }
+    }
+
+    typeLine();
+  </script>
+</body>
+</html>
