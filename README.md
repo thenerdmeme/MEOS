@@ -1,59 +1,67 @@
-MEOS 1.0 (v1.0)
+version v1.0 → MEOS 1.0 (1995-1996)
 
-Frame: Solid gray, thick bevels (3.1-style) → lighter gray, thinner bevels (95-style).
+Frame: Solid gray with thick bevels (3.1) → thinner, lighter gray bevels (95).
 
-Title Bar: Blue gradient, chunky 3D system buttons → flatter gray-blue with smaller beveled buttons, bold caption.
+Title Bar:
 
-Menu Bar: File | Options | Help (3.1) → File | Edit | View | Help (95).
+3.1: Blue gradient, chunky 3D system buttons.
 
-Icons: 16×16 / 32×32, 16-color palette (basic dithering).
+95: Flat gray-blue, smaller beveled buttons, bold caption.
+
+Menu Bar:
+
+3.1: File | Options | Help.
+
+95: File | Edit | View | Help.
+
+Icons: 16×16 / 32×32, 16-color palette in 3.1 → smoother shading but still limited in 95.
 
 Scrollbar: Boxy beveled gray with arrows.
 
-MEOS 2.0 (v2.0)
+version v2.0 → MEOS 2.0 (1996-1997)
 
-Frame: Softer 3D borders, smoother shading.
+Frame: Softer, refined 3D borders, less harsh shading.
 
-Title Bar: Richer blue gradient, bold white caption text with subtle drop shadow.
+Title Bar: Richer blue gradient, bold white caption with drop shadow.
 
-System Buttons: Rounder edges, glossy highlights.
+System Buttons: Rounder edges, smoother highlights.
 
-Menu Bar: Standardized File | Edit | View | Help.
+Menu Bar: Cleaner, standardized File | Edit | View | Help.
 
-Toolbar: Integrated Explorer toolbar; 16×16 / 24×24 icons; hover highlight.
+Toolbar: Integrated Explorer toolbar, 16×16 / 24×24 icons, hover highlight.
 
-Icons: 256-color support, smoother dithering, more detail.
+Icons: 256-color support, more detail and smoother dithering.
 
-Scrollbar: Polished beveled look, smoother gradients.
+Scrollbar: Polished, smoother 3D shading.
 
-MEOS 3.0 (v3.0)
+version v3.0 → MEOS 3.0 (1997-2000)
 
-Frame: Flatter, neutral gray-blue; beveling reduced.
+Frame: Flatter, more neutral gray-blue theme, reduced beveling.
 
-Title Bar: Professional blue gradient; bold, clean white text.
+Title Bar: Professional blue gradient, cleaner bold white text.
 
-System Buttons: Sleeker, flatter; subtle hover effects.
+System Buttons: Flatter, sleeker with subtle hover effects.
 
-Menu Bar: Expanded Explorer layout: File | Edit | View | Favorites | Tools | Help.
+Menu Bar: Standard Explorer layout (File | Edit | View | Favorites | Tools | Help).
 
-Toolbar: Fully customizable; icons with optional text labels.
+Toolbar: Fully customizable, icons + text labels option.
 
-Icons: High-color (16-bit/24-bit); more realistic, shaded.
+Icons: High-color (16-bit/24-bit), more realistic designs.
 
-Scrollbar: Thinner, with subtle highlights and less contrast.
+Scrollbar: Thinner, subtle highlights, less contrast.
 
-MEOS 4.0 (v4.0)
+version v4.0 → MEOS 4.0 (2000-2001)
 
-Frame: Rounded edges, colorful “Luna” theme (blue/green/silver variants).
+Frame: Rounded edges, colorful “Luna” theme (blue/green/silver).
 
-Title Bar: Glossy gradient, bright highlights, soft shadowed captions.
+Title Bar: Glossy gradient with bright highlights, soft shadowed caption text.
 
-System Buttons: Fully rounded, color-coded (green maximize, red close, etc.).
+System Buttons: Fully rounded, color-coded (green maximize, red close, etc. in Luna).
 
-Menu Bar: Blended into Explorer; sometimes replaced by task panes.
+Menu Bar: Blended into Explorer, sometimes replaced with task panes.
 
-Toolbar: Larger colorful icons; integrated with side task panels.
+Toolbar: Larger, colorful toolbar icons, integrated with side task panels.
 
-Icons: 32-bit alpha-blended; smooth transparency and drop shadows.
+Icons: Full 32-bit alpha-blended icons (smooth transparency, shadows).
 
-Scrollbar: Rounded arrows, soft pastel gradients.
+Scrollbar: Rounded arrows, softer pastel gradients.
