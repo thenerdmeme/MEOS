@@ -1165,6 +1165,83 @@ else if(cmd === 'techno'){
   }
 }
 
+
+
+else if(cmd === '1970'){
+  response = "1970 virus simulated... (yellow screen)";
+  dosTerminal.style.background = "yellow";
+  dosTerminal.style.color = "black";
+}
+
+else if(cmd === 'form'){
+  response = "Form virus simulated... Boot sector illusion!";
+  virusEffectSequence('small');
+}
+
+else if(cmd === 'acme'){
+  response = "ACME virus simulated... cartoon chaos unleashed!";
+  showAsciiArt("ACME™ SYSTEMS TAKEOVER");
+  setTimeout(hideAsciiArt, 2000);
+}
+
+else if(cmd === '4k'){
+  response = "4K virus simulated... tiny but tricky!";
+  virusEffectSequence('small');
+}
+
+else if(cmd === 'brain'){
+  response = "Brain virus simulated... Pakistan Brain loaded!";
+  virusEffectSequence('big');
+}
+
+else if(cmd === 'acid'){
+  response = "Acid virus simulated... psychedelic screen melt!";
+  dosTerminal.style.background = "purple";
+  dosTerminal.style.color = "lime";
+}
+
+else if(cmd === 'escape'){
+  response = "Escape virus simulated... Your data tries to flee!";
+  virusEffectSequence('small');
+}
+
+else if(cmd === 'apple'){
+  response = "Apple virus simulated... 🍎 Bite taken out of your files!";
+  showAsciiArt("    APPLE VIRUS    ");
+  setTimeout(hideAsciiArt, 2000);
+}
+
+else if(cmd === 'michelangelo'){
+  response = "Michelangelo virus simulated... 🎨 Masterpiece erasure!";
+  virusEffectSequence('big');
+}
+
+else if(cmd === 'color'){
+  const color = arg.toLowerCase();
+  const map = {
+    black: ["black","white"],
+    blue: ["blue","white"],
+    green: ["green","black"],
+    aqua: ["aqua","black"],
+    red: ["red","white"],
+    purple: ["purple","white"],
+    yellow: ["yellow","black"],
+    white: ["white","black"],
+    gray: ["gray","black"]
+  };
+  if(map[color]){
+    dosTerminal.style.background = map[color][0];
+    dosTerminal.style.color = map[color][1];
+    response = "Color scheme changed to " + color;
+  } else {
+    response = "Available colors: black, blue, green, aqua, red, purple, yellow, white, gray";
+  }
+}
+
+else if(cmd === 'type' && arg.toLowerCase() === 'hello world'){
+  response = "Hello, world!";
+}
+
 else if(cmd === 'zmist'){
   response = "ZMist virus simulated...\nMetamorphic mutation underway...";
   virusEffectSequence('big');
