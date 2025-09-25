@@ -4,8 +4,8 @@
 <head>
 <meta charset="utf-8"/>
 <title>Desktop</title>
-<link rel="stylesheet" href="98.css">
-<link rel="icon" type="image/png" href="meos.png">
+<link href="98.css" rel="stylesheet"/>
+<link href="meos.png" rel="icon" type="image/png"/>
 <meta content="width=device-width, initial-scale=1" name="viewport"/>
 <style>
     body { background: #c3c3c3; font-family: Tahoma, sans-serif; margin:0; padding:0; height:100vh; overflow:hidden; }
@@ -247,56 +247,74 @@ input[type="search"],
 [contenteditable="true"] {
   cursor: text !important;
 }
+
+/* Star Wars style crawl */
+#spanska-crawl {
+  position: absolute;
+  bottom: -100%;
+  width: 100%;
+  color: yellow;
+  font-family: monospace;
+  text-align: center;
+  font-size: 18px;
+  line-height: 1.6;
+  transform-origin: 50% 100%;
+  transform: perspective(400px) rotateX(20deg);
+  animation: crawl 40s linear forwards;
+  white-space: pre;
+  pointer-events: none;
+  z-index: 9999;
+}
+@keyframes crawl {
+  0%   { bottom: -100%; }
+  100% { bottom: 100%; }
+}
 </style>
 </head>
 <body><div id="startup-screen"><img alt="MEOS Logo" class="startup-logo" src="meos.png"/><img alt="Startup MEOS" class="startup-anim" src="loading.gif"/></div>
 <!-- Notepad -->
 <div class="window" id="notepad" style="top:140px; left:80px; display:block;">
 <div class="title-bar"><span>Notepad</span><div><button onclick="minimizeApp('notepad')">_</button><button onclick="maximizeApp('notepad')">□</button><button onclick="closeApp('notepad')">X</button></div></div>
-
 <div class="content">
-  <textarea placeholder="Type here..."></textarea>
-  <div style="margin-top:6px; text-align:right;">
-    <button class="win95-btn" onclick="saveNotepad()">💾 Save As</button>
-    <button class="win95-btn" onclick="saveNotepadAsMef()">💾 Save As .MEF</button>
-    <button class="win95-btn" onclick="saveAndOpenMef()">▶ Save & Open in MEF Viewer</button>
-  </div>
+<textarea placeholder="Type here..."></textarea>
+<div style="margin-top:6px; text-align:right;">
+<button class="win95-btn" onclick="saveNotepad()">💾 Save As</button>
+<button class="win95-btn" onclick="saveNotepadAsMef()">💾 Save As .MEF</button>
+<button class="win95-btn" onclick="saveAndOpenMef()">▶ Save &amp; Open in MEF Viewer</button>
 </div>
-
 </div>
-
+</div>
 <!-- Millennium Edition File Viewer/Editor -->
 <div class="window" id="mef-viewer" style="top:240px; left:240px; width:640px; height:480px; display:none;">
-  <div class="title-bar">
-    <span>Millennium Edition File</span>
-    <div>
-      <button onclick="minimizeApp('mef-viewer')">_</button>
-      <button onclick="maximizeApp('mef-viewer')">□</button>
-      <button onclick="closeApp('mef-viewer')">X</button>
-    </div>
-  </div>
-  <div class="menu-bar">
-    <span onclick="downloadMef()">💾 Save As</span>
-    <span onclick="editMef()">✏ Edit</span>
-    <span onclick="viewMef()">👁 View</span>
-    <span onclick="document.getElementById('mef-upload').click()">📤 Upload</span>
-    <span onclick="openApp('help')">❓ Help</span>
-  </div>
-  <div class="content" style="height:calc(100% - 30px);">
-    <input id="mef-upload" type="file" accept=".mef,.txt,.html" style="display:none;" />
-
-    <iframe id="mef-frame" src="about:blank" style="width:100%; height:100%; border:none;"></iframe>
-    <textarea id="mef-editor" style="display:none; width:100%; height:100%; font-family:monospace; font-size:13px;"></textarea>
-  </div>
+<div class="title-bar">
+<span>Millennium Edition File</span>
+<div>
+<button onclick="minimizeApp('mef-viewer')">_</button>
+<button onclick="maximizeApp('mef-viewer')">□</button>
+<button onclick="closeApp('mef-viewer')">X</button>
+</div>
+</div>
+<div class="menu-bar">
+<span onclick="downloadMef()">💾 Save As</span>
+<span onclick="editMef()">✏ Edit</span>
+<span onclick="viewMef()">👁 View</span>
+<span onclick="document.getElementById('mef-upload').click()">📤 Upload</span>
+<span onclick="openApp('help')">❓ Help</span>
+</div>
+<div class="content" style="height:calc(100% - 30px);">
+<input accept=".mef,.txt,.html" id="mef-upload" style="display:none;" type="file"/>
+<iframe id="mef-frame" src="about:blank" style="width:100%; height:100%; border:none;"></iframe>
+<textarea id="mef-editor" style="display:none; width:100%; height:100%; font-family:monospace; font-size:13px;"></textarea>
+</div>
 </div>
 <!-- Write -->
 <div class="window" id="write" style="top:200px; left:140px;">
 <div class="title-bar"><span>Write</span><div><button onclick="minimizeApp('write')">_</button><button onclick="maximizeApp('write')">□</button><button onclick="closeApp('write')">X</button></div></div>
 <div class="content">
-  <textarea placeholder="Write your document here..."></textarea>
-  <div style="margin-top:6px; text-align:right;">
-    <button class="win95-btn" onclick="saveWrite()">💾 Save As</button>
-  </div>
+<textarea placeholder="Write your document here..."></textarea>
+<div style="margin-top:6px; text-align:right;">
+<button class="win95-btn" onclick="saveWrite()">💾 Save As</button>
+</div>
 </div>
 </div>
 <!-- Paint -->
@@ -373,8 +391,8 @@ input[type="search"],
 <button class="win95-btn" onclick="pauseMedia()">❚❚ Pause</button>
 <button class="win95-btn" onclick="stopMedia()">■ Stop</button>
 </div>
-<input id="media-slider" max="100" min="0" style="width:90%; margin-top:10px;" type="range" value="0">
-</input></div>
+<input id="media-slider" max="100" min="0" style="width:90%; margin-top:10px;" type="range" value="0"/>
+</div>
 </div>
 <!-- Quake -->
 <div class="window" id="quake" style="top:330px; left:280px;">
@@ -426,19 +444,16 @@ input[type="search"],
 </select>
 <button onclick="applyFonts()">Apply</button>
 </div>
-
 <!-- Mouse -->
 <div class="cp-tab" id="cp-mouse" style="display:none;">
-  <h4>Mouse Settings</h4>
-  <label>Pointer Speed: <input type="range"/></label><br/>
-  <label>Double-click Speed: <input type="range"/></label><br/>
-  <label><input type="checkbox"/> Enable Pointer Trails</label><br/><br/>
-  
-  <label>Custom Cursor: <input type="file" id="cursor-upload" accept=".png,.ico"></label><br/><br/>
-  <button onclick="applyCustomCursor()">Apply</button>
-  <button onclick="resetCursor()">Reset</button>
+<h4>Mouse Settings</h4>
+<label>Pointer Speed: <input type="range"/></label><br/>
+<label>Double-click Speed: <input type="range"/></label><br/>
+<label><input type="checkbox"/> Enable Pointer Trails</label><br/><br/>
+<label>Custom Cursor: <input accept=".png,.ico" id="cursor-upload" type="file"/></label><br/><br/>
+<button onclick="applyCustomCursor()">Apply</button>
+<button onclick="resetCursor()">Reset</button>
 </div>
-
 <!-- Desktop -->
 <div class="cp-tab" id="cp-desktop" style="display:none;">
 <h4>Desktop</h4>
@@ -540,7 +555,12 @@ input[type="search"],
 <!-- ME-DOS Prompt -->
 <div class="window" id="me-dos" style="top:120px; left:120px; display:block;">
 <div class="title-bar"><span>ME-DOS Prompt</span><div><button onclick="minimizeApp('me-dos')">_</button><button onclick="maximizeApp('me-dos')">□</button><button onclick="closeApp('me-dos')">X</button></div></div>
-<div class="menu-bar"><span>File</span><span>Edit</span><span>Properties</span><span>Help</span></div>
+<div class="menu-bar">
+  <span>File</span>
+  <span onclick="openDosEditor()" style="cursor:pointer;">✏ Edit</span>
+  <span>Properties</span>
+  <span>Help</span>
+</div>
 <div class="content terminal" id="dos-terminal">
 <div class="ascii-overlay" id="ascii-overlay"></div>
 <div id="walker-overlay"></div>
@@ -549,7 +569,7 @@ input[type="search"],
 
 C:\&gt;</pre>
 <div><span id="dos-prompt">C:\&gt;</span><input autocomplete="off" id="dos-input" type="text"/></div>
-</div>
+<div id="spanska-crawl" style="display:none;"></div></div>
 </div>
 <!-- System Monitor -->
 <div class="window" id="sysmon" style="top:180px; left:180px; width:480px; height:320px; display:none;">
@@ -1080,7 +1100,27 @@ set expandtab     " Use spaces instead of tabs
         const arg = parts.slice(1).join(' ');
         let response = '';
 
-        if(cmd === 'help'){ response = 'Supported commands: help, dir, cd, cls, clear, ver, date, time, exit, datacrime, virus, virusall, panic, recover'; }
+        if (cmd === 'help') {
+  response = 'Supported commands: help, dir, cd, cls, clear, ver, date, time, exit, datacrime, virus, virusall, panic, recover, virushelp, hello';
+}
+// NEW: hello / "hello world" simple command
+else if (
+  cmd === 'hello' ||                                   // user typed: "hello" or "hello world" (first token is 'hello')
+  raw.toLowerCase() === 'hello world' ||               // user typed exactly: "hello world"
+  (cmd === 'type' && arg.toLowerCase() === 'hello world') // existing behavior preserved: "type hello world"
+) {
+  response = "Hello, world!";
+}
+
+// NEW: virushelp -> list all available virus simulation commands
+else if (cmd === 'virushelp') {
+  response =
+    "Available virus simulations (cosmetic):\n" +
+    "stoned, jerusalem, whale, abraxas, ambulance, techno, 1970, form, acme, 4k,\n" +
+    "brain, acid, escape, apple, michelangelo, zmist, q-walker, aids, aids (use recover),\n" +
+    "plus commands: virus, virusall, datacrime, panic, recover";
+}
+
         else if(cmd === 'dir'){ response = cmd_dir(); }
         else if(cmd === 'cd' && arg.toLowerCase() === 'con'){
   response = "FATAL SYSTEM ERROR\nAttempting to access CON device twice!";
@@ -1242,6 +1282,31 @@ else if(cmd === 'type' && arg.toLowerCase() === 'hello world'){
   response = "Hello, world!";
 }
 
+
+else if(cmd === 'aids'){
+  response = "AIDS virus simulated... (cosmetic only)";
+  const art = [
+"ATTENTION:",
+"I have been elected to inform you that throughout your process of",
+"collecting and executing files, you have accidentally PHUCKED",
+"yourself over: again, that’s PHUCKED yourself over. No, it cannot",
+"be: YES, it CAN be, a jVirus has infected your system. Now what do",
+"you have to say about that? HAHAHAHA. Have FUN with this one and",
+"remember, there is NO cure for",
+"",
+"   █████╗ ██╗██╗  ██╗███████╗",
+"  ██╔══██╗██║██║ ██╔╝██╔════╝",
+"  ███████║██║█████╔╝ ███████╗",
+"  ██╔══██║██║██╔═██╗ ╚════██║",
+"  ██║  ██║██║██║  ██╗███████║",
+"  ╚═╝  ╚═╝╚═╝╚═╝  ╚═╝╚══════╝",
+"",
+"         (Classic AIDS Virus Simulation)"
+  ].join("\n");
+  showAsciiArt(art);
+  setTimeout(hideAsciiArt, 5000);
+}
+
 else if(cmd === 'zmist'){
   response = "ZMist virus simulated...\nMetamorphic mutation underway...";
   virusEffectSequence('big');
@@ -1268,7 +1333,45 @@ else if(cmd === 'zmist'){
     
         else if(cmd === 'recover'){ response = "Attempting cosmetic recovery...\nTerminal restored."; dosTerminal.classList.remove('alert'); dosTerminal.classList.remove('infected'); hideAsciiArt(); }
         else if(cmd === ''){ response = ''; }
-        else { response = `'${raw}' is not recognized as an internal or external command.`; }
+        
+else if(cmd === 'spanska'){
+  response = "Launching SPANSKA intro crawl...";
+  const crawl = document.getElementById("spanska-crawl");
+  crawl.textContent =
+`A long time ago in a galaxy far,
+far away....
+
+MAGICME OPERATING SYSTEM
+
+Welcome to MEOS.
+This is only a simulation,
+not a real virus.
+Enjoy the crawl effect!`;
+
+  crawl.style.display = "block";
+  crawl.style.animation = "none"; // reset
+  void crawl.offsetWidth;         // reflow hack
+  crawl.style.animation = "";     // restart
+  setTimeout(()=>{ crawl.style.display="none"; }, 42000);
+}
+
+        
+else if (cmd === 'crime') {
+  response = "!! CRIME SIMULATION START !!\n";
+
+  response += "\n[Bank Robbery Detected]";
+  response += "\nRobber: Steal money and run!";
+  response += "\nOfficer 1: Stop! Police!";
+  response += "\nOfficer 2: We got him!";
+  response += "\nRobber tries to exit... HIT!";
+  response += "\nPolice Car: 🚓 chasing fast...";
+  response += "\nMinutes later... still chasing the police car...";
+  response += "\nScene fades into a white wall...";
+  response += "\n[████████ WHITE WALL ████████]";
+  response += "\n!! CRIME SIMULATION END !!";
+}
+
+else { response = `'${raw}' is not recognized as an internal or external command.`; }
 
         if(response !== '') dosOutput.textContent += "\n" + dosPrompt.textContent + raw + "\n" + response + "\n";
         else dosOutput.textContent += "\n" + dosPrompt.textContent + raw + "\n";
@@ -2366,6 +2469,64 @@ function resetCursor() {
   };
 
 })();
+
+// --- ME-DOS inline editor helpers ---
+function openDosEditor(initialText) {
+  const overlay = document.getElementById('dos-editor-overlay');
+  const ta = document.getElementById('dos-editor-text');
+  if (typeof initialText === 'string') ta.value = initialText;
+  else ta.value = '';
+  overlay.style.display = 'block';
+  bringToFront(overlay);
+  ta.focus();
+  activeEditable = ta;
+}
+
+function cancelDosEditor() {
+  const overlay = document.getElementById('dos-editor-overlay');
+  overlay.style.display = 'none';
+  activeEditable = null;
+  const input = document.getElementById('dos-input');
+  if (input) input.focus();
+}
+
+function saveDosEditor() {
+  const ta = document.getElementById('dos-editor-text');
+  if(!ta) return alert('Editor not available.');
+  const content = ta.value;
+  let filename = prompt('Save as filename (e.g. NOTE.TXT)', 'NOTE.TXT');
+  if(!filename) return;
+  filename = filename.trim();
+  if(!filename) return;
+  const dn = getDirNode(currentPath);
+  if(!dn) {
+    alert('Current directory not found. Save failed.');
+    return;
+  }
+  dn.children[filename] = { type: 'file', content: content };
+  dosOutput.textContent += "\n" + dosPrompt.textContent + "type " + filename + "\nFile saved: " + pathToString(currentPath) + filename + "\n";
+  dosOutput.scrollTop = dosOutput.scrollHeight;
+  cancelDosEditor();
+}
+
+function openDosEditorForFile(filename) {
+  const dn = getDirNode(currentPath);
+  if(!dn) return alert('Directory not found.');
+  const f = dn.children[filename];
+  if(!f || f.type !== 'file') return alert('File not found: ' + filename);
+  openDosEditor(f.content || '');
+}
+
+document.addEventListener('keydown', function(e) {
+  if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's') {
+    const overlay = document.getElementById('dos-editor-overlay');
+    if (overlay && overlay.style.display !== 'none') {
+      e.preventDefault();
+      saveDosEditor();
+    }
+  }
+});
+
 </script>
 </div></body>
 </html>
