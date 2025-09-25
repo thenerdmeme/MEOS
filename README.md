@@ -30,7 +30,7 @@ True windowed multitasking
 
 Early networking support
 
-🖥️ 1997–1999 — MEOS 3.x (Third Release)
+🖥️ 1997–2000 — MEOS 3.x (Third Release)
 
 Influenced by Windows 98
 
@@ -44,4 +44,16 @@ Stable core with FAT-like filesystem
 
 Runs easily in emulators or on modern hardware
 
-A tribute to the golden age of desktop computing
+🖥️ 2000–2001 — MEOS 4.x (Fourth Release)
+
+Influenced by Windows 2000 / ME / XP
+
+Integrated File Explorer with tree navigation
+
+Theme support: silver, classic, and colorful variations
+
+Media Player and Paint tool bundled
+
+Stable core with FAT-like filesystem
+
+A tribute to the MEOS (golden age) of desktop computing
