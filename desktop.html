@@ -555,12 +555,7 @@ input[type="search"],
 <!-- ME-DOS Prompt -->
 <div class="window" id="me-dos" style="top:120px; left:120px; display:block;">
 <div class="title-bar"><span>ME-DOS Prompt</span><div><button onclick="minimizeApp('me-dos')">_</button><button onclick="maximizeApp('me-dos')">□</button><button onclick="closeApp('me-dos')">X</button></div></div>
-<div class="menu-bar">
-  <span>File</span>
-  <span onclick="openDosEditor()" style="cursor:pointer;">✏ Edit</span>
-  <span>Properties</span>
-  <span>Help</span>
-</div>
+<div class="menu-bar"><span>File</span><span>Edit</span><span>Properties</span><span>Help</span></div>
 <div class="content terminal" id="dos-terminal">
 <div class="ascii-overlay" id="ascii-overlay"></div>
 <div id="walker-overlay"></div>
@@ -884,29 +879,33 @@ set expandtab     " Use spaces instead of tabs
 <div class="submenu">
 <img class="menu-icon" src="#"/> Programs
       <div class="submenu-items">
+
 <div class="submenu">All Apps
-          <div class="submenu-items">
-<div onclick="openApp('notepad')">Notepad</div>
-<div onclick="openApp('write')">Write</div>
-<div onclick="openApp('paint')">Paint</div>
-<div onclick="openApp('calculator')">Calculator</div>
-<div onclick="openApp('lucasscape')">The LucasScape</div>
-<div onclick="openApp('media-player')">Media Player</div>
-<div onclick="openApp('quake')">Quake</div>
-<div onclick="openApp('controlpanel')">Control Panel</div>
-<div onclick="openApp('me-dos')">ME-DOS Prompt</div>
-<div onclick="openApp('minesweeper')">Minesweeper</div>
-<div onclick="openApp('file-manager')">File Manager</div>
-<div onclick="openApp('hover!')">Hover!</div>
-<div onclick="openApp('skifree')">SkiFree</div>
-<div onclick="openApp('excel97')">Excel 97</div>
-<div onclick="openApp('vim')">Vim</div>
-<div onclick="openApp('taskmanager')">Task Manager</div>
-<div onclick="openApp('sysmon')">System Monitor</div>
-<div onclick="openApp('themes')">Desktop Themes</div>
-<div onclick="openApp('screensavers')">Desktop Screensavers</div>
-<div onclick="openApp('clock')">Clock</div>
+  <div class="submenu-items">
+    <div onclick="openApp('progman')"><img src="https://thenerdmeme.github.io/MEOS-Icon-Viewer/72.png" class="menu-icon" alt="Program Manager"/> Program Manager</div>
+    <div onclick="openApp('notepad')"><img src="https://thenerdmeme.github.io/MEOS-Icon-Viewer/1.png" class="menu-icon" alt="Notepad"/> Notepad</div>
+    <div onclick="openApp('write')"><img src="https://thenerdmeme.github.io/MEOS-Icon-Viewer/2.png" class="menu-icon" alt="Write"/> Write</div>
+    <div onclick="openApp('paint')"><img src="https://thenerdmeme.github.io/MEOS-Icon-Viewer/3.png" class="menu-icon" alt="Paint"/> Paint</div>
+    <div onclick="openApp('calculator')"><img src="https://thenerdmeme.github.io/MEOS-Icon-Viewer/4.png" class="menu-icon" alt="Calculator"/> Calculator</div>
+    <div onclick="openApp('lucasscape')"><img src="https://thenerdmeme.github.io/MEOS-Icon-Viewer/5.png" class="menu-icon" alt="The LucasScape"/> The LucasScape</div>
+    <div onclick="openApp('media-player')"><img src="https://thenerdmeme.github.io/MEOS-Icon-Viewer/6.png" class="menu-icon" alt="Media Player"/> Media Player</div>
+    <div onclick="openApp('quake')"><img src="https://thenerdmeme.github.io/MEOS-Icon-Viewer/7.png" class="menu-icon" alt="Quake"/> Quake</div>
+    <div onclick="openApp('controlpanel')"><img src="https://thenerdmeme.github.io/MEOS-Icon-Viewer/8.png" class="menu-icon" alt="Control Panel"/> Control Panel</div>
+    <div onclick="openApp('me-dos')"><img src="https://thenerdmeme.github.io/MEOS-Icon-Viewer/9.png" class="menu-icon" alt="ME-DOS Prompt"/> ME-DOS Prompt</div>
+    <div onclick="openApp('minesweeper')"><img src="https://thenerdmeme.github.io/MEOS-Icon-Viewer/10.png" class="menu-icon" alt="Minesweeper"/> Minesweeper</div>
+    <div onclick="openApp('file-manager')"><img src="https://thenerdmeme.github.io/MEOS-Icon-Viewer/11.png" class="menu-icon" alt="File Manager"/> File Manager</div>
+    <div onclick="openApp('hover!')"><img src="https://thenerdmeme.github.io/MEOS-Icon-Viewer/12.png" class="menu-icon" alt="Hover!"/> Hover!</div>
+    <div onclick="openApp('skifree')"><img src="https://thenerdmeme.github.io/MEOS-Icon-Viewer/13.png" class="menu-icon" alt="SkiFree"/> SkiFree</div>
+    <div onclick="openApp('excel97')"><img src="https://thenerdmeme.github.io/MEOS-Icon-Viewer/14.png" class="menu-icon" alt="Excel 97"/> Excel 97</div>
+    <div onclick="openApp('vim')"><img src="https://thenerdmeme.github.io/MEOS-Icon-Viewer/15.png" class="menu-icon" alt="Vim"/> Vim</div>
+    <div onclick="openApp('taskmanager')"><img src="https://thenerdmeme.github.io/MEOS-Icon-Viewer/16.png" class="menu-icon" alt="Task Manager"/> Task Manager</div>
+    <div onclick="openApp('sysmon')"><img src="https://thenerdmeme.github.io/MEOS-Icon-Viewer/17.png" class="menu-icon" alt="System Monitor"/> System Monitor</div>
+    <div onclick="openApp('themes')"><img src="https://thenerdmeme.github.io/MEOS-Icon-Viewer/18.png" class="menu-icon" alt="Desktop Themes"/> Desktop Themes</div>
+    <div onclick="openApp('screensavers')"><img src="https://thenerdmeme.github.io/MEOS-Icon-Viewer/19.png" class="menu-icon" alt="Desktop Screensavers"/> Desktop Screensavers</div>
+    <div onclick="openApp('clock')"><img src="https://thenerdmeme.github.io/MEOS-Icon-Viewer/20.png" class="menu-icon" alt="Clock"/> Clock</div>
+  </div>
 </div>
+
 </div>
 <div onclick="openApp('help')">Help</div>
 <div onclick="openApp('run')">Run...</div>
@@ -2469,64 +2468,6 @@ function resetCursor() {
   };
 
 })();
-
-// --- ME-DOS inline editor helpers ---
-function openDosEditor(initialText) {
-  const overlay = document.getElementById('dos-editor-overlay');
-  const ta = document.getElementById('dos-editor-text');
-  if (typeof initialText === 'string') ta.value = initialText;
-  else ta.value = '';
-  overlay.style.display = 'block';
-  bringToFront(overlay);
-  ta.focus();
-  activeEditable = ta;
-}
-
-function cancelDosEditor() {
-  const overlay = document.getElementById('dos-editor-overlay');
-  overlay.style.display = 'none';
-  activeEditable = null;
-  const input = document.getElementById('dos-input');
-  if (input) input.focus();
-}
-
-function saveDosEditor() {
-  const ta = document.getElementById('dos-editor-text');
-  if(!ta) return alert('Editor not available.');
-  const content = ta.value;
-  let filename = prompt('Save as filename (e.g. NOTE.TXT)', 'NOTE.TXT');
-  if(!filename) return;
-  filename = filename.trim();
-  if(!filename) return;
-  const dn = getDirNode(currentPath);
-  if(!dn) {
-    alert('Current directory not found. Save failed.');
-    return;
-  }
-  dn.children[filename] = { type: 'file', content: content };
-  dosOutput.textContent += "\n" + dosPrompt.textContent + "type " + filename + "\nFile saved: " + pathToString(currentPath) + filename + "\n";
-  dosOutput.scrollTop = dosOutput.scrollHeight;
-  cancelDosEditor();
-}
-
-function openDosEditorForFile(filename) {
-  const dn = getDirNode(currentPath);
-  if(!dn) return alert('Directory not found.');
-  const f = dn.children[filename];
-  if(!f || f.type !== 'file') return alert('File not found: ' + filename);
-  openDosEditor(f.content || '');
-}
-
-document.addEventListener('keydown', function(e) {
-  if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's') {
-    const overlay = document.getElementById('dos-editor-overlay');
-    if (overlay && overlay.style.display !== 'none') {
-      e.preventDefault();
-      saveDosEditor();
-    }
-  }
-});
-
 </script>
 </div></body>
 </html>
