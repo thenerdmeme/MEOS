@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Shutdown</title>
+  <link rel="icon" type="image/png" href="meos.png">
+  <link rel="stylesheet" href="98.css">
+  <style>
+    body {
+      margin: 0;
+      background-color: black;
+      color: orange;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      font-family: "Courier New", monospace;
+      font-size: 2rem;
+      text-align: center;
+      position: relative;
+    }
+    .window {
+      background: transparent;
+      border: none;
+      box-shadow: none;
+    }
+    .window-body {
+      color: orange; /* ensures text color stays orange even inside 98.css */
+    }
+    img {
+      position: absolute;
+      bottom: 20px;
+      width: 120px;
+    }
+  </style>
+</head>
+<body>
+  <div class="window">
+    <div class="window-body">
+      It's now safe to turn off your computer MEOS.
+    </div>
+  </div>
+
+  <img src="meos.png" alt="MEOS Logo">
+
+  <script>
+    // Redirect to logon.html after 3 seconds
+    setTimeout(() => {
+      window.location.href = "logon.html";
+    }, 3000);
+  </script>
+</body>
+</html>

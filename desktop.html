@@ -269,6 +269,10 @@ input[type="search"],
   0%   { bottom: -100%; }
   100% { bottom: 100%; }
 }
+
+#power-options .content {
+background-color: #c0c0c0; /* Added background color */
+}
 </style>
 </head>
 <body><div id="startup-screen"><img alt="MEOS Logo" class="startup-logo" src="meos.png"/><img alt="Startup MEOS" class="startup-anim" src="loading.gif"/></div>
@@ -922,31 +926,39 @@ set expandtab     " Use spaces instead of tabs
 <div onclick="openApp('find')"><img alt="Find" class="menu-icon" src="https://thenerdmeme.github.io/MEOS-Icon-Viewer/24.png"/> Find</div>
 </div>
 
-<div class="submenu">
-  <img src="https://thenerdmeme.github.io/MEOS-Icon-Viewer/25.png" class="menu-icon" alt="Shutdown"/> Shut Down
-  <div class="submenu-items">
-    <div onclick="window.location.href='logon.html'">
-      <img src="https://thenerdmeme.github.io/MEOS-Icon-Viewer/26.png" class="menu-icon"/> Log Off
+
+
+<div onclick="openApp('power-options')">
+  <img src="https://thenerdmeme.github.io/MEOS-Icon-Viewer/25.png" class="menu-icon"/> Power Options
+</div>
+
+</div>
+
+</div>
+</div>
+</div>
+
+
+</div>
+</div>
+
+<div class="window" id="power-options" style="top:220px; left:220px; width:300px; height:200px; display:none;">
+  <div class="title-bar">
+    <span>Power Options</span>
+    <div>
+      <button onclick="minimizeApp('power-options')">_</button>
+      <button onclick="maximizeApp('power-options')">□</button>
+      <button onclick="closeApp('power-options')">X</button>
     </div>
-    <div onclick="location.reload()">
-      <img src="https://thenerdmeme.github.io/MEOS-Icon-Viewer/27.png" class="menu-icon"/> Restart
-    </div>
-    <div onclick="location.reload()">
-      <img src="https://thenerdmeme.github.io/MEOS-Icon-Viewer/28.png" class="menu-icon"/> Shut Down
-    </div>
-    <div onclick="location.reload()">
-      <img src="https://thenerdmeme.github.io/MEOS-Icon-Viewer/29.png" class="menu-icon"/> Sleep
-    </div>
+  </div>
+  <div class="content" style="display:flex; flex-direction:column; gap:10px; justify-content:center; align-items:center; height:100%;">
+    <button class="win95-btn" onclick="window.location.href='logon.html'">Log Off</button>
+    <button class="win95-btn" onclick="window.location.href='shutdown.html'">Restart</button>
+    <button class="win95-btn" onclick="window.location.href='shutdown.html'">Shut Down</button>
+    <button class="win95-btn" onclick="location.reload()">Sleep</button>
   </div>
 </div>
 
-</div>
-</div>
-</div>
-
-
-</div>
-</div>
 <script>
     // Basic window controls
     function openApp(id){ const app=document.getElementById(id); if(!app) return; app.style.display='block'; bringToFront(app); }
