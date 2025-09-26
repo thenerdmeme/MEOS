@@ -286,8 +286,7 @@ body {
 }
 </style>
 </head>
-<body><div id="startup-screen"><img alt="MEOS Logo" class="startup-logo" src="meos.png"/><img alt="Startup MEOS" class="startup-anim" src="loading.gif"/></div>
-<!-- Notepad -->
+<body><div id="startup-screen"><img alt="MEOS Logo" class="startup-logo" src="meos.png"/><img alt="Startup MEOS" class="startup-anim" src="loading.gif"/></div><audio id="startup-sound" autoplay style="display:none;"><source src="startup.mp3" type="audio/mp3"></audio><!-- Notepad -->
 <div class="window" id="notepad" style="top:140px; left:80px; display:block;">
 <div class="title-bar"><span>Notepad</span><div><button onclick="minimizeApp('notepad')">_</button><button onclick="maximizeApp('notepad')">□</button><button onclick="closeApp('notepad')">X</button></div></div>
 <div class="content">
@@ -2776,6 +2775,14 @@ function resetCursor() {
     // Optionally, scroll help to MEF-related section if exists
   };
 
+  // Ensure the startup sound plays once the page has fully loaded
+  window.onload = function() {
+    var audio = document.getElementById('startup-sound');
+    if (audio) {
+      audio.play();
+    }
+  };
+    
 })();
 </script>
 </body>
