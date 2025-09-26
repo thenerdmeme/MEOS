@@ -1,3 +1,5 @@
+Welcome to MEOS!
+
 version v1.0 → MEOS 1.0 (1995-1996)
 
 Frame: Solid gray with thick bevels (3.1) → thinner, lighter gray bevels (95).
