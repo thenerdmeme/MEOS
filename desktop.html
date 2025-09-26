@@ -1265,15 +1265,15 @@ else if (
   raw.toLowerCase() === 'hello world' ||               // user typed exactly: "hello world"
   (cmd === 'type' && arg.toLowerCase() === 'hello world') // existing behavior preserved: "type hello world"
 ) {
-  response = "Hello, world!";
+  response = "Hello, World!";
 }
 
 // NEW: virushelp -> list all available virus simulation commands
 else if (cmd === 'virushelp') {
   response =
     "Available virus simulations (cosmetic):\n" +
-    "stoned, jerusalem, whale, abraxas, ambulance, 1970, form, acme, 4k,\n" +
-    "brain, acid, escape, michelangelo, zmist, q-walker, aids, skynet, techno, kela, plane, casino, diamond\n" +
+    "spanska, stoned, jerusalem, whale, abraxas, ambulance, 1970, form, acme, 4k,\n" +
+    "brain, acid, escape, michelangelo, zmist, q-walker, aids, skynet, techno, kela, plane, casino, diamond, marine, hymn, message, drugs\n" +
     "plus commands: virus, virusall, datacrime, panic, recover";
 }
 
@@ -1679,6 +1679,162 @@ else if(cmd === 'diamond'){
   }, 5000);
 }    
 
+else if(cmd === 'marine'){ 
+  response = "Launching Marine Animation with Boat...";
+
+  // Define the frames for the marine animation with a boat moving
+  let animationFrames = [
+    "  ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ",
+    "  ~                ~                  ~                 ~                ~ ",
+    "      ~       __    ___    __     ~     __      ___      __        ~      ",
+    "  ~         /  \\  |  |\\  |  |  ~    |  |  |  |    |  /  |    ~       ~  ",
+    "     ~     |    | |  | \\ |  |  ~    |  |  |  |    | |   |   ~     ~     ",
+    " ~        |____| |__|  \\|__|~    ~     ~      ~      ~    ~      ~        ~ ",
+    "  ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ",
+    "     ~                   __/\__            ~               ~             ",
+    "   ~       ~          ___/    \\___         ~   ~   ~        ~            ~  ",
+    " ~    ~      ~     __/            \\__~      ~      ~      ~          ~     ",
+    "      ~     ~    __/                  \\__       ~  ~     ~    ~     ~      ",
+    " ~    ~   ~   __/                        \\__  ~     ~        ~       ~     ",
+    "     ~    ~    ~   ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~  "
+  ];
+
+  // Add boat movement by cycling boat positions across the screen
+  let boatPosition = 0;
+  let boatFrame = "    ~      __/\\__\n ~  ~   ___/    \\___~\n    ~     __/        \\__  ~";
+
+  // Function to update the boat position
+  let boatInterval = setInterval(() => {
+    let spacePadding = " ".repeat(boatPosition);
+    let boatWithPadding = spacePadding + boatFrame;
+    
+    // Clear and update the animation with boat movement
+    dosOutput.textContent = animationFrames.join("\n") + "\n" + boatWithPadding;
+    dosOutput.scrollTop = dosOutput.scrollHeight; // Scroll to bottom
+
+    boatPosition++;
+    if (boatPosition > 30) boatPosition = 0; // Reset position after it moves across
+
+  }, 500); // Update boat position every 500ms
+}
+
+else if(cmd === 'hymn'){ 
+  response = "Starting the Hymn...";
+
+  // Define the hymn-like animation
+  let hymnFrames = [
+    "🎶  Amazing Grace, how sweet the sound, 🎶",
+    "🎶  That saved a wretch like me. 🎶",
+    "🎶  I once was lost, but now am found, 🎶",
+    "🎶  Was blind, but now I see. 🎶",
+    "🎶  Through many dangers, toils, and snares, 🎶",
+    "🎶  I have already come. 🎶",
+    "🎶  'Tis grace that brought me safe thus far, 🎶",
+    "🎶  And grace will lead me home. 🎶"
+  ];
+
+  // Create a function to display the frames
+  let frameIndex = 0;
+  let hymnInterval = setInterval(() => {
+    if (frameIndex < hymnFrames.length) {
+      dosOutput.textContent += "\n" + hymnFrames[frameIndex];
+      dosOutput.scrollTop = dosOutput.scrollHeight; // auto-scroll to show the text
+      frameIndex++;
+    } else {
+      clearInterval(hymnInterval); // Stop the hymn after it completes
+    }
+  }, 1000); // Adjust the speed by changing the delay (1000ms = 1 second per line)
+}    
+
+else if(cmd === 'message'){ 
+  response = "Displaying A Subtle Political Message...";
+
+  // Message content
+  let message = [
+    "In a world of constant change, it is important to remember that:",
+    "Individual freedoms and social responsibilities must coexist.",
+    "We must strive for equity, justice, and understanding across all boundaries.",
+    "Let’s work towards a future that values kindness, progress, and empathy."
+  ];
+
+  // Create a function to display the message with pauses between lines
+  let messageIndex = 0;
+  let messageInterval = setInterval(() => {
+    if (messageIndex < message.length) {
+      dosOutput.textContent += "\n" + message[messageIndex];
+      dosOutput.scrollTop = dosOutput.scrollHeight; // auto-scroll to show the text
+      messageIndex++;
+    } else {
+      clearInterval(messageInterval); // Stop after message completes
+    }
+  }, 2000); // Display each line with a delay of 2000ms (2 seconds)
+}
+
+else if(cmd === 'drugs'){ 
+  response = "Displaying 'Don't Do Drugs' message...";
+
+  // Set the background to 'drugs.gif' for the effect
+  document.body.style.backgroundImage = "url('drugs.gif')";
+  document.body.style.backgroundSize = "cover";
+  document.body.style.backgroundPosition = "center";
+  
+  // Add a message about not doing drugs
+  let message = "⚠️ Don't Do Drugs ⚠️\n Stay safe. Stay healthy.";
+  let messageElement = document.createElement('div');
+  messageElement.style.position = 'absolute';
+  messageElement.style.top = '50%';
+  messageElement.style.left = '50%';
+  messageElement.style.transform = 'translate(-50%, -50%)';
+  messageElement.style.color = 'white';
+  messageElement.style.fontSize = '2em';
+  messageElement.style.fontFamily = 'Arial, sans-serif';
+  messageElement.style.textAlign = 'center';
+  messageElement.textContent = message;
+  
+  // Append the message to the body
+  document.body.appendChild(messageElement);
+  
+  // Remove the message after 10 seconds
+  setTimeout(() => {
+    messageElement.remove();
+  }, 10000);
+  
+  // Create a radar-like effect
+  let radarEffect = document.createElement('div');
+  radarEffect.style.position = 'absolute';
+  radarEffect.style.top = '50%';
+  radarEffect.style.left = '50%';
+  radarEffect.style.transform = 'translate(-50%, -50%)';
+  radarEffect.style.width = '200px';
+  radarEffect.style.height = '200px';
+  radarEffect.style.border = '5px solid #00FF00';
+  radarEffect.style.borderRadius = '50%';
+  radarEffect.style.animation = 'radar-scan 2s linear infinite';
+  
+  // Append the radar effect to the body
+  document.body.appendChild(radarEffect);
+  
+  // Add radar scan animation
+  let style = document.createElement('style');
+  style.innerHTML = `
+    @keyframes radar-scan {
+      0% {
+        transform: translate(-50%, -50%) scale(0);
+        opacity: 1;
+      }
+      50% {
+        transform: translate(-50%, -50%) scale(1.5);
+        opacity: 0.5;
+      }
+      100% {
+        transform: translate(-50%, -50%) scale(0);
+        opacity: 0;
+      }
+    }
+  `;
+  document.head.appendChild(style);
+}   
+    
 else { response = `'${raw}' is not recognized as an internal or external command.`; }
 
         if(response !== '') dosOutput.textContent += "\n" + dosPrompt.textContent + raw + "\n" + response + "\n";
