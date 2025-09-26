@@ -356,7 +356,7 @@ input[type="search"],
 </div>
 </div>
 </div>
-<!-- LucasScape -->
+<!-- The LucasScape -->
 <div class="window" id="lucasscape" style="top:270px; left:220px;">
 <div class="title-bar">
 <span>The LucasScape</span>
@@ -402,6 +402,26 @@ input[type="search"],
 </div>
 <div class="content">
 <iframe src="https://www.netquake.io/" title="Quake"></iframe>
+</div>
+</div>
+<!-- Doom -->
+<div class="window" id="doom" style="top:330px; left:280px;">
+<div class="title-bar">
+<span>Doom</span>
+<div><button onclick="minimizeApp('doom')">_</button><button onclick="maximizeApp('doom')">□</button><button onclick="closeApp('doom')">X</button></div>
+</div>
+<div class="content">
+<iframe src="https://ustymukhman.github.io/webDOOM/public/" title="Doom"></iframe>
+</div>
+</div>
+<!-- PrinceJS -->
+<div class="window" id="princejs" style="top:330px; left:280px;">
+<div class="title-bar">
+<span>PrinceJS</span>
+<div><button onclick="minimizeApp('princejs')">_</button><button onclick="maximizeApp('princejs')">□</button><button onclick="closeApp('princejs')">X</button></div>
+</div>
+<div class="content">
+<iframe src="https://princejs.com/" title="PrinceJS"></iframe>
 </div>
 </div>
 <!-- Control Panel -->
@@ -522,13 +542,6 @@ input[type="search"],
 <div class="title-bar"><span>File Manager</span><div><button onclick="minimizeApp('file-manager')">_</button><button onclick="maximizeApp('file-manager')">□</button><button onclick="closeApp('file-manager')">X</button></div></div>
 <div class="content">
 <iframe src="filemanager.html" title="File Manager"></iframe>
-</div>
-</div>
-<!-- Hover -->
-<div class="window" id="hover" style="top:500px; left:460px;">
-<div class="title-bar"><span>Hover!</span><div><button onclick="minimizeApp('hover')">_</button><button onclick="maximizeApp('hover')">□</button><button onclick="closeApp('hover')">X</button></div></div>
-<div class="content">
-<iframe src="https://web.archive.org/web/20131203172640if_/http://www.hover.ie/#single-player/play" title="Hover!"></iframe>
 </div>
 </div>
 <!-- SkiFree -->
@@ -774,7 +787,7 @@ set expandtab     " Use spaces instead of tabs
 <div class="content">
 <p>Select a GIF screensaver or upload your own (.gif):</p>
 <select id="screensaver-list" size="6" style="width:100%;">
-<option>Matrix Rain</option><option>Floating Bubbles</option><option>Starfield</option><option>Slideshow</option>
+<option>Matrix Rain</option><option>Underwater</option><option>Starfield</option><option>Wizard</option>
 </select>
 <div style="margin-top:8px;">
 <input accept=".gif" id="ss-upload" type="file"/><button onclick="applyScreensaver()">Apply</button>
@@ -800,28 +813,30 @@ set expandtab     " Use spaces instead of tabs
 <hr/>
 <h4>Applications</h4>
 <ul>
-<li>Notepad — Version v1.0 (working)</li>
-<li>Write — Version v1.0 (working)</li>
-<li>Paint — Version v1.0 (working)</li>
-<li>Calculator — Version v1.0 (working)</li>
-<li>The LucasScape — Version v1.0 (working)</li>
-<li>Media Player — Version v1.0 (working)</li>
-<li>Quake — Version v1.0 (working)</li>
-<li>Control Panel — Version v1.0 (working)</li>
-<li>ME-DOS Prompt — Version v1.0 (working)</li>
-<li>Minesweeper — Version v1.0 (working)</li>
-<li>File Manager — Version v1.0 (working)</li>
-<li>Hover! — Version v1.0 (working)</li>
-<li>SkiFree — Version v1.0 (working)</li>
-<li>Excel 97 — Version v1.0 (working)</li>
-<li>Vim — Version v1.0 (working)</li>
-<li>Task Manager — Version v1.0 (working)</li>
-<li>System Monitor — Version v1.0 (working)</li>
-<li>Desktop Themes — Version v1.0 (working)</li>
-<li>Desktop Screensavers — Version v1.0 (working)</li>
-<li>Clock — Version v1.0 (working)</li>
-<li>Run — Version v1.0 (working)</li>
-<li>Find — Version v1.0 (working)</li>
+<li>Notepad — Version v1.0</li>
+<li>MEF Viewer — Version v1.0</li>
+<li>Write — Version v1.0</li>
+<li>Paint — Version v1.0</li>
+<li>Calculator — Version v1.0</li>
+<li>The LucasScape — Version v1.0</li>
+<li>Media Player — Version v1.0</li>
+<li>PrinceJS — Version v1.0</li>
+<li>Quake — Version v1.0</li>
+<li>Doom — Version v1.0</li>
+<li>Control Panel — Version v1.0</li>
+<li>ME-DOS Prompt — Version v1.0</li>
+<li>Minesweeper — Version v1.0</li>
+<li>File Manager — Version v1.0</li>
+<li>SkiFree — Version v1.0</li>
+<li>Excel 97 — Version v1.0</li>
+<li>Vim — Version v1.0</li>
+<li>Task Manager — Version v1.0</li>
+<li>System Monitor — Version v1.0</li>
+<li>Desktop Themes — Version v1.0</li>
+<li>Desktop Screensavers — Version v1.0</li>
+<li>Clock — Version v1.0</li>
+<li>Run — Version v1.0</li>
+<li>Find — Version v1.0</li>
 </ul>
 </div>
 </div>
@@ -887,12 +902,13 @@ set expandtab     " Use spaces instead of tabs
 <div onclick="openApp('calculator')"><img alt="Calculator" class="menu-icon" src="https://thenerdmeme.github.io/MEOS-Icon-Viewer/4.png"/> Calculator</div>
 <div onclick="openApp('lucasscape')"><img alt="The LucasScape" class="menu-icon" src="https://thenerdmeme.github.io/MEOS-Icon-Viewer/5.png"/> The LucasScape</div>
 <div onclick="openApp('media-player')"><img alt="Media Player" class="menu-icon" src="https://thenerdmeme.github.io/MEOS-Icon-Viewer/6.png"/> Media Player</div>
-<div onclick="openApp('quake')"><img alt="Quake" class="menu-icon" src="https://thenerdmeme.github.io/MEOS-Icon-Viewer/7.png"/> Quake</div>
+<div onclick="openApp('princejs')"><img alt="Quake" class="menu-icon" src="https://thenerdmeme.github.io/MEOS-Icon-Viewer/72.png"/> PrinceJS</div>
+<div onclick="openApp('quake')"><img alt="Quake" class="menu-icon" src="https://thenerdmeme.github.io/MEOS-Icon-Viewer/72.png"/> Quake</div>
+<div onclick="openApp('doom')"><img alt="Doom" class="menu-icon" src="https://thenerdmeme.github.io/MEOS-Icon-Viewer/72.png"/> Doom</div>
 <div onclick="openApp('controlpanel')"><img alt="Control Panel" class="menu-icon" src="https://thenerdmeme.github.io/MEOS-Icon-Viewer/8.png"/> Control Panel</div>
 <div onclick="openApp('me-dos')"><img alt="ME-DOS Prompt" class="menu-icon" src="https://thenerdmeme.github.io/MEOS-Icon-Viewer/9.png"/> ME-DOS Prompt</div>
 <div onclick="openApp('minesweeper')"><img alt="Minesweeper" class="menu-icon" src="https://thenerdmeme.github.io/MEOS-Icon-Viewer/10.png"/> Minesweeper</div>
 <div onclick="openApp('file-manager')"><img alt="File Manager" class="menu-icon" src="https://thenerdmeme.github.io/MEOS-Icon-Viewer/11.png"/> File Manager</div>
-<div onclick="openApp('hover')"><img alt="Hover!" class="menu-icon" src="https://thenerdmeme.github.io/MEOS-Icon-Viewer/12.png"/> Hover!</div>
 <div onclick="openApp('skifree')"><img alt="SkiFree" class="menu-icon" src="https://thenerdmeme.github.io/MEOS-Icon-Viewer/13.png"/> SkiFree</div>
 <div onclick="openApp('excel97')"><img alt="Excel 97" class="menu-icon" src="https://thenerdmeme.github.io/MEOS-Icon-Viewer/14.png"/> Excel 97</div>
 <div onclick="openApp('vim')"><img alt="Vim" class="menu-icon" src="https://thenerdmeme.github.io/MEOS-Icon-Viewer/15.png"/> Vim</div>
