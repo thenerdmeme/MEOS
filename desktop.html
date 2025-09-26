@@ -886,6 +886,7 @@ set expandtab     " Use spaces instead of tabs
 </div>
 <div aria-hidden="true" class="context-menu" id="context-menu" role="menu">
 <div id="ctx-refresh">Refresh</div>
+<div id="ctx-select-all">Select All</div>
 <div id="ctx-cut">Cut</div>
 <div id="ctx-copy">Copy</div>
 <div id="ctx-paste">Paste</div>
@@ -982,50 +983,152 @@ set expandtab     " Use spaces instead of tabs
       if (win.id) makeDraggable(win.id);
     });
 
-    // Context menu + clipboard
-    const contextMenu = document.getElementById('context-menu');
-    const ctxRefresh = document.getElementById('ctx-refresh');
-    const ctxCut = document.getElementById('ctx-cut');
-    const ctxCopy = document.getElementById('ctx-copy');
-    const ctxPaste = document.getElementById('ctx-paste');
-    const ctxOpenControl = document.getElementById('ctx-open-control');
+// Context menu + clipboard
+const ctxSelectAll = document.getElementById('ctx-select-all');
+const ctxCut = document.getElementById('ctx-cut');
+const ctxCopy = document.getElementById('ctx-copy');
+const ctxPaste = document.getElementById('ctx-paste');
+let activeEditable = null;  // To track the active editable field (e.g., textarea)
 
-    let activeWindow = null;
-    let activeEditable = null;
-    document.addEventListener('mousedown', (e) => {
-      if (e.target.tagName === 'TEXTAREA' || e.target.isContentEditable) {
+// Function to write text to clipboard
+async function writeToClipboard(text) {
+    try {
+        await navigator.clipboard.writeText(text);
+        return true;
+    } catch (e) {
+        console.error('Clipboard write failed:', e);
+        alert('Clipboard write failed. Ensure you have permission to access the clipboard.');
+        return false;
+    }
+}
+
+// Function to read text from clipboard
+async function readFromClipboard() {
+    try {
+        return await navigator.clipboard.readText();
+    } catch (e) {
+        console.error('Clipboard read failed:', e);
+        alert('Clipboard read failed. Please ensure clipboard access is available.');
+        throw e;
+    }
+}
+
+// Select All functionality
+ctxSelectAll.addEventListener('click', () => {
+    hideContextMenu();
+    if (activeEditable) {
+        if (activeEditable.setSelectionRange) {
+            activeEditable.setSelectionRange(0, activeEditable.value.length);  // For textareas
+        } else if (activeEditable.select) {
+            activeEditable.select();  // For contenteditable fields
+        }
+        activeEditable.focus();  // Ensure the text area or editable area is focused
+    } else {
+        alert('No active editable area to select all.');
+    }
+});
+
+// Cut functionality
+ctxCut.addEventListener('click', async () => {
+    hideContextMenu();
+    if (!activeEditable) return alert('No active window to cut from.');
+    const target = activeEditable;
+    if (target && target.selectionStart !== undefined) {
+        if (target.selectionStart === target.selectionEnd) {
+            alert('Nothing selected to cut.');
+            return;
+        }
+        const selectedText = target.value.substring(target.selectionStart, target.selectionEnd);
+        const success = await writeToClipboard(selectedText);
+        if (!success) {
+            alert('Cut failed: permission denied');
+            return;
+        }
+        const before = target.value.substring(0, target.selectionStart);
+        const after = target.value.substring(target.selectionEnd);
+        target.value = before + after;
+        target.selectionStart = target.selectionEnd = before.length;
+        target.focus();
+    } else {
+        alert('No editable area in active window.');
+    }
+});
+
+// Copy functionality
+ctxCopy.addEventListener('click', async () => {
+    hideContextMenu();
+    if (!activeEditable) return alert('No active window to copy from.');
+    const target = activeEditable;
+    if (target && target.selectionStart !== undefined) {
+        if (target.selectionStart === target.selectionEnd) {
+            alert('Nothing selected to copy.');
+            return;
+        }
+        const selectedText = target.value.substring(target.selectionStart, target.selectionEnd);
+        const success = await writeToClipboard(selectedText);
+        if (!success) {
+            alert('Copy failed: permission denied');
+            return;
+        }
+    } else {
+        alert('No editable area in active window.');
+    }
+});
+
+// Paste functionality
+ctxPaste.addEventListener('click', async () => {
+    hideContextMenu();
+    if (!activeEditable) return alert('No active window to paste into.');
+    const target = activeEditable;
+    if (target && target.selectionStart !== undefined) {
+        try {
+            const clipboardText = await readFromClipboard();
+            const start = target.selectionStart;
+            const end = target.selectionEnd;
+            const before = target.value.substring(0, start);
+            const after = target.value.substring(end);
+            target.value = before + clipboardText + after;
+            const newPos = start + clipboardText.length;
+            target.selectionStart = target.selectionEnd = newPos;
+            target.focus();
+        } catch (err) {
+            alert('Paste failed: permission denied or unavailable.');
+        }
+    } else {
+        alert('No editable area in active window.');
+    }
+});
+
+// Right-click detection to activate the editable field
+document.addEventListener('mousedown', (e) => {
+    if (e.target.tagName === 'TEXTAREA' || e.target.isContentEditable) {
         activeEditable = e.target;
-        activeWindow = e.target.closest('.window') || activeWindow;
-      }
-    });
-    activeWindow = document.getElementById('notepad');
+    }
+});
 
-    document.addEventListener('contextmenu', (e) => {
-      e.preventDefault();
-      const win = e.target.closest('.window');
-      if (win) activeWindow = win;
-      if (e.target.tagName === 'TEXTAREA' || e.target.isContentEditable) activeEditable = e.target;
-      contextMenu.style.left = e.pageX + 'px';
-      contextMenu.style.top = e.pageY + 'px';
-      contextMenu.style.display = 'flex';
-      contextMenu.setAttribute('aria-hidden','false');
-      bringToFront(contextMenu);
-    });
-    document.addEventListener('click', (e)=>{ if(!e.target.closest('#context-menu')) hideContextMenu(); });
-    document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') hideContextMenu(); });
-    function hideContextMenu(){ contextMenu.style.display='none'; contextMenu.setAttribute('aria-hidden','true'); }
-
-    ctxRefresh.addEventListener('click', ()=>{ hideContextMenu(); location.reload(); });
-    ctxOpenControl.addEventListener('click', ()=>{ hideContextMenu(); openApp('controlpanel'); });
-
-    async function writeToClipboard(text){ try{ await navigator.clipboard.writeText(text); return true;}catch(e){console.warn('clipboard write failed',e); return false;} }
-    async function readFromClipboard(){ try{ return await navigator.clipboard.readText(); }catch(e){ console.warn('clipboard read failed',e); throw e; } }
-
-    ctxCut.addEventListener('click', async ()=>{ hideContextMenu(); if(!activeWindow) return alert('No active window to cut from.'); const target = activeEditable && activeWindow.contains(activeEditable) ? activeEditable : activeWindow.querySelector('textarea'); if(target && target.selectionStart!==undefined){ if(target.selectionStart===target.selectionEnd){ alert('Nothing selected to cut.'); return; } const selected = target.value.substring(target.selectionStart,target.selectionEnd); const ok = await writeToClipboard(selected); if(!ok){ alert('Cut failed: permission denied'); return; } const before = target.value.substring(0,target.selectionStart); const after = target.value.substring(target.selectionEnd); target.value = before + after; target.selectionStart = target.selectionEnd = before.length; target.focus(); }else{ alert('No editable area in active window.'); } });
-
-    ctxCopy.addEventListener('click', async ()=>{ hideContextMenu(); if(!activeWindow) return alert('No active window to copy from.'); const target = activeEditable && activeWindow.contains(activeEditable) ? activeEditable : activeWindow.querySelector('textarea'); if(target && target.selectionStart!==undefined){ if(target.selectionStart===target.selectionEnd){ alert('Nothing selected to copy.'); return; } const selected = target.value.substring(target.selectionStart,target.selectionEnd); const ok = await writeToClipboard(selected); if(!ok){ alert('Copy failed: permission denied'); return; } }else{ alert('No editable area in active window.'); } });
-
-    ctxPaste.addEventListener('click', async ()=>{ hideContextMenu(); if(!activeWindow) return alert('No active window to paste into.'); const target = activeEditable && activeWindow.contains(activeEditable) ? activeEditable : activeWindow.querySelector('textarea'); if(target && target.selectionStart!==undefined){ try{ const text = await readFromClipboard(); const start = target.selectionStart; const end = target.selectionEnd; const before = target.value.substring(0,start); const after = target.value.substring(end); target.value = before + text + after; const newPos = start + text.length; target.selectionStart = target.selectionEnd = newPos; target.focus(); }catch(err){ alert('Paste failed: permission denied or unavailable.'); } }else{ alert('No editable area in active window.'); } });
+// Context menu handling
+const contextMenu = document.getElementById('context-menu');
+document.addEventListener('contextmenu', (e) => {
+    e.preventDefault();
+    const win = e.target.closest('.window');
+    if (win) activeWindow = win;
+    if (e.target.tagName === 'TEXTAREA' || e.target.isContentEditable) activeEditable = e.target;
+    contextMenu.style.left = e.pageX + 'px';
+    contextMenu.style.top = e.pageY + 'px';
+    contextMenu.style.display = 'flex';
+    contextMenu.setAttribute('aria-hidden','false');
+    bringToFront(contextMenu);
+});
+document.addEventListener('click', (e) => {
+    if (!e.target.closest('#context-menu')) hideContextMenu();
+});
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') hideContextMenu();
+});
+function hideContextMenu() {
+    contextMenu.style.display = 'none';
+    contextMenu.setAttribute('aria-hidden','true');
+}
 
     // Accessibility focusin handling
     document.addEventListener('focusin', (e)=>{ if(e.target.tagName==='TEXTAREA' || e.target.isContentEditable){ activeEditable = e.target; activeWindow = e.target.closest('.window') || activeWindow; if(activeWindow) bringToFront(activeWindow); } });
