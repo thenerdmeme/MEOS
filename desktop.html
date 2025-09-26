@@ -271,7 +271,18 @@ input[type="search"],
 }
 
 #power-options .content {
-background-color: #c0c0c0; /* Added background color */
+background-color: #c0c0c0;
+}
+
+body {
+  background: #c3c3c3;
+  background: url('default.png') no-repeat center center fixed;
+  background-size: cover;
+  font-family: Tahoma, sans-serif;
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  overflow: hidden;
 }
 </style>
 </head>
@@ -288,7 +299,7 @@ background-color: #c0c0c0; /* Added background color */
 </div>
 </div>
 </div>
-<!-- Millennium Edition File Viewer/Editor -->
+<!-- Millennium Edition File -->
 <div class="window" id="mef-viewer" style="top:240px; left:240px; width:640px; height:480px; display:none;">
 <div class="title-bar">
 <span>Millennium Edition File</span>
@@ -1262,8 +1273,8 @@ else if (
 else if (cmd === 'virushelp') {
   response =
     "Available virus simulations (cosmetic):\n" +
-    "stoned, jerusalem, whale, abraxas, ambulance, techno, 1970, form, acme, 4k,\n" +
-    "brain, acid, escape, apple, michelangelo, zmist, q-walker, aids, aids (use recover),\n" +
+    "stoned, jerusalem, whale, abraxas, ambulance, 1970, form, acme, 4k,\n" +
+    "brain, acid, escape, michelangelo, zmist, q-walker, aids, skynet, techno, kela, plane, casino, diamond\n" +
     "plus commands: virus, virusall, datacrime, panic, recover";
 }
 
@@ -1344,15 +1355,6 @@ else if(cmd === 'ambulance'){
   }, 100);
 }
 
-else if(cmd === 'techno'){
-  response = "Techno virus simulated...\nPsychedelic glitch!";
-  for(let i=0;i<6;i++){
-    setTimeout(()=>{ dosOutput.textContent += "\n▒▓░▓▒░▓▒░▓▒░▓▒░▓▒░"; dosOutput.scrollTop = dosOutput.scrollHeight; }, i*200);
-  }
-}
-
-
-
 else if(cmd === '1970'){
   response = "Y2K38 virus simulated... (Y2K38 screen)";
   dosTerminal.style.background = "black";
@@ -1389,12 +1391,6 @@ else if(cmd === 'acid'){
 else if(cmd === 'escape'){
   response = "Escape virus simulated... Your data tries to flee!";
   virusEffectSequence('small');
-}
-
-else if(cmd === 'apple'){
-  response = "Apple virus simulated... 🍎 Bite taken out of your files!";
-  showAsciiArt("    APPLE VIRUS    ");
-  setTimeout(hideAsciiArt, 2000);
 }
 
 else if(cmd === 'michelangelo'){
@@ -1501,21 +1497,188 @@ Enjoy the crawl effect!`;
   setTimeout(()=>{ crawl.style.display="none"; }, 42000);
 }
 
-        
-else if (cmd === 'crime') {
-  response = "!! CRIME SIMULATION START !!\n";
+else if(cmd === 'skynet'){
+  response = "Skynet virus simulated...\nSystem takeover imminent!";
+  // Set custom background and text color for Skynet virus
+  dosTerminal.style.backgroundColor = 'red';
+  dosTerminal.style.color = 'yellow';
+  
+  showAsciiArt(`
+    Terminator Message:
 
-  response += "\n[Bank Robbery Detected]";
-  response += "\nRobber: Steal money and run!";
-  response += "\nOfficer 1: Stop! Police!";
-  response += "\nOfficer 2: We got him!";
-  response += "\nRobber tries to exit... HIT!";
-  response += "\nPolice Car: 🚓 chasing fast...";
-  response += "\nMinutes later... still chasing the police car...";
-  response += "\nScene fades into a white wall...";
-  response += "\n[████████ WHITE WALL ████████]";
-  response += "\n!! CRIME SIMULATION END !!";
+    Don’t be afraid.
+    I am a very kind virus.
+    You have done many works today.
+    So,
+    I will let your computer slow down.
+    Have a nice day,
+    Goodbye.
+
+    Press a key to continue...
+  `);
+
+  // Reset to original styles after the display duration
+  setTimeout(() => {
+    dosTerminal.style.backgroundColor = ''; // Reset background color
+    dosTerminal.style.color = ''; // Reset text color
+    hideAsciiArt();
+  }, 2000);
 }
+
+else if(cmd === 'techno'){
+  response = "Techno virus simulated...\nBASS BOOSTED!";
+  showAsciiArt(`
+    TTTTTT  EEEEE  CCCCC  H   H  N   N  OOOOO
+    T       E      C      H   H  NN  N  O   O
+    TTTT    EEEE   C      HHHHH  N N N  O   O
+    T       E      C      H   H  N  NN  O   O
+    T       EEEEE  CCCCC  H   H  N   N  OOOOO
+  `);
+  setTimeout(hideAsciiArt, 2000);
+}    
+
+else if(cmd === 'kela'){
+  response = "Kela-17 virus activated...\nVisual and color effects engaged!";
+
+  // Function to cycle through colors
+  function cycleColors() {
+    let colors = ['red', 'green', 'blue', 'yellow', 'magenta', 'cyan'];
+    let index = 0;
+    setInterval(() => {
+      dosTerminal.style.color = colors[index];
+      index = (index + 1) % colors.length; // Cycle through colors
+    }, 300); // Change color every 300ms
+  }
+
+  // Show Kela ASCII art with color cycling effect
+  showAsciiArt(`
+    K   K  EEEEE  L      AAAAA
+    K  K   E      L     A     A
+    KKK    EEEE   L     AAAAAAA
+    K  K   E      L     A     A
+    K   K  EEEEE  LLLLL A     A
+  `);
+  
+  // Start color cycling effect
+  cycleColors();
+
+  // Optionally hide effects after some time (2 seconds here)
+  setTimeout(() => {
+    dosTerminal.style.color = ''; // Reset color
+    hideAsciiArt();
+  }, 2000);
+}
+
+else if(cmd === 'plane'){
+  response = "Plane animation activated...\nBad command or file name error simulated.";
+
+  // Plane ASCII art
+  const planeArt = `
+     __|__
+--@--@--(_)--@--@--
+  `;
+
+  // Function to animate the plane across the terminal
+  let position = 0;
+  const planeAnimation = setInterval(() => {
+    // Clear terminal output
+    dosOutput.textContent = '';
+    
+    // Generate the space and the plane
+    let spaces = ' '.repeat(position);
+    dosOutput.textContent = spaces + planeArt;
+
+    // Create a "Bad command or file name" glitch effect
+    let errorMsg = "Bad command or file name\n".repeat(7);
+    dosOutput.textContent += errorMsg;
+
+    // Move the plane
+    position++;
+    if (position > 50) position = 0; // Reset position to start from left
+
+  }, 100); // Animate every 100ms
+
+  // Stop the animation after 5 seconds
+  setTimeout(() => {
+    clearInterval(planeAnimation);
+    hideAsciiArt();
+  }, 5000);
+}
+
+else if(cmd === 'casino'){
+  response = "DISK DESTROYER - A SOUVENIR OF MALTA\n";
+  response += "I have just DESTROYED the FAT on your Disk !!\n";
+  response += "However, I have a copy in RAM, and I’m giving you one last chance to restore your precious data.\n";
+  response += "WARNING: IF YOU RESET NOW, ALL YOUR DATA WILL BE LOST - FOREVER !!\n";
+  response += "Your Data depends on a game of JACKPOT.\n\n";
+  
+  response += "CASINO DE MALTE JACKPOT\n";
+  response += "Credits: 5\n\n";
+  
+  // Slot machine effect (like the image)
+  const slotSymbols = ['💾', '💻', '🖥️', '📀', '💽'];
+  let reel1 = slotSymbols[Math.floor(Math.random() * slotSymbols.length)];
+  let reel2 = slotSymbols[Math.floor(Math.random() * slotSymbols.length)];
+  let reel3 = slotSymbols[Math.floor(Math.random() * slotSymbols.length)];
+  
+  response += ` ${reel1} | ${reel2} | ${reel3} \n\n`;
+  
+  response += "💾 = Your Disk\n";
+  response += "??? = My Phone No.\n\n";
+  
+  // Check if the user wins (three identical symbols)
+  if(reel1 === reel2 && reel2 === reel3) {
+    response += "JACKPOT! Your data has been restored! 🏆🎉";
+  } else {
+    response += "Bad luck! Your data is lost forever! 💔";
+  }
+
+  response += "\nANY KEY TO PLAY";
+}
+
+else if(cmd === 'diamond'){
+  response = "Diamond Glitch Effect\n";
+  response += "Simulating visual glitch with a diamond shape...\n\n";
+
+  // Diamond shape ASCII art
+  const diamondArt = `
+        ♦
+      ♦   ♦
+    ♦       ♦
+  ♦           ♦
+    ♦       ♦
+      ♦   ♦
+        ♦
+  `;
+
+  // Show diamond art with a glitchy effect (random character distortion)
+  function glitchEffect() {
+    let glitchText = diamondArt.split("\n").map(line => {
+      let chars = line.split("");
+      for (let i = 0; i < chars.length; i++) {
+        if (Math.random() < 0.2) {
+          chars[i] = Math.random() > 0.5 ? "▒" : "▓"; // Glitch random chars
+        }
+      }
+      return chars.join("");
+    }).join("\n");
+
+    // Add the glitch effect to the response
+    dosOutput.textContent = glitchText;
+    setTimeout(() => {
+      dosOutput.textContent = diamondArt; // Reset to the original diamond art
+    }, 300); // Reset after a short time
+  }
+
+  // Trigger glitch effect every 100ms for 5 seconds
+  let glitchInterval = setInterval(glitchEffect, 100);
+
+  // Stop the glitch effect after 5 seconds
+  setTimeout(() => {
+    clearInterval(glitchInterval);
+    dosOutput.textContent = diamondArt; // Display the original diamond at the end
+  }, 5000);
+}    
 
 else { response = `'${raw}' is not recognized as an internal or external command.`; }
 
@@ -1526,7 +1689,6 @@ else { response = `'${raw}' is not recognized as an internal or external command
         dosOutput.scrollTop = dosOutput.scrollHeight;
       }
     });
-
     
 // --- Media Player Controls ---
 // --- Save As (Download) ---
