@@ -127,11 +127,25 @@ body {
   border: 2px solid var(--window-border) !important;
   color: var(--menu-text) !important;
 }
+    
 .taskbar {
-  background: var(--menu-bg) !important;
-  color: var(--menu-text) !important;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #c0c0c0;
+  height: 30px;
+  padding: 5px;
+  box-sizing: border-box;
 }
 
+#taskbar-clock {
+  font-family: 'Tahoma', sans-serif;
+  font-size: 14px;
+  color: black;
+  background: #c0c0c0;
+  padding: 4px 10px;
+  margin-left: auto;
+}
 
 .start-menu div, .submenu-items div {
   color: #000000 !important;
@@ -408,6 +422,16 @@ body {
 <input id="media-slider" max="100" min="0" style="width:90%; margin-top:10px;" type="range" value="0"/>
 </div>
 </div>
+<!-- PrinceJS -->
+<div class="window" id="princejs" style="top:330px; left:280px;">
+<div class="title-bar">
+<span>PrinceJS</span>
+<div><button onclick="minimizeApp('princejs')">_</button><button onclick="maximizeApp('princejs')">□</button><button onclick="closeApp('princejs')">X</button></div>
+</div>
+<div class="content">
+<iframe src="https://princejs.com/" title="PrinceJS"></iframe>
+</div>
+</div>
 <!-- Quake -->
 <div class="window" id="quake" style="top:330px; left:280px;">
 <div class="title-bar">
@@ -426,16 +450,6 @@ body {
 </div>
 <div class="content">
 <iframe src="https://ustymukhman.github.io/webDOOM/public/" title="Doom"></iframe>
-</div>
-</div>
-<!-- PrinceJS -->
-<div class="window" id="princejs" style="top:330px; left:280px;">
-<div class="title-bar">
-<span>PrinceJS</span>
-<div><button onclick="minimizeApp('princejs')">_</button><button onclick="maximizeApp('princejs')">□</button><button onclick="closeApp('princejs')">X</button></div>
-</div>
-<div class="content">
-<iframe src="https://princejs.com/" title="PrinceJS"></iframe>
 </div>
 </div>
 <!-- Control Panel -->
@@ -904,7 +918,7 @@ set expandtab     " Use spaces instead of tabs
 <div id="ctx-open-task">Open Task Manager</div></div>
 <!-- Taskbar -->
 <div class="taskbar" style="position:fixed; top:0; left:0; width:100%; height:28px; background:#c0c0c0; border-bottom:2px outset #fff; display:flex; align-items:center; padding:2px 6px; box-sizing:border-box; z-index:2000;">
-<div class="start-button" onclick="toggleStartMenu()">Start</div>
+<div class="start-button" onclick="toggleStartMenu()">Start</div><div id="taskbar-clock" style="margin-left:auto; padding:4px 10px; font-size:14px; background:#c0c0c0; color:#000;">21:16:39</div>
 <div class="start-menu" id="start-menu">
 <div class="submenu">
 <img alt="Programs" class="menu-icon" src="https://thenerdmeme.github.io/MEOS-Icon-Viewer/72.png"/> Programs
@@ -1782,10 +1796,10 @@ else if(cmd === 'drugs'){
   let message = "⚠️ Don't Do Drugs ⚠️\n Stay safe. Stay healthy.";
   let messageElement = document.createElement('div');
   messageElement.style.position = 'absolute';
-  messageElement.style.top = '50%';
-  messageElement.style.left = '50%';
+  messageElement.style.top = '100%';
+  messageElement.style.left = '100%';
   messageElement.style.transform = 'translate(-50%, -50%)';
-  messageElement.style.color = 'white';
+  messageElement.style.color = 'black';
   messageElement.style.fontSize = '2em';
   messageElement.style.fontFamily = 'Arial, sans-serif';
   messageElement.style.textAlign = 'center';
@@ -2938,6 +2952,21 @@ function resetCursor() {
       audio.play();
     }
   };
+
+// Function to update the clock every second
+function updateClock() {
+  const clockElement = document.getElementById('taskbar-clock');
+  setInterval(() => {
+    const now = new Date();
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    const seconds = String(now.getSeconds()).padStart(2, '0');
+    clockElement.textContent = `${hours}:${minutes}:${seconds}`;
+  }, 1000);
+}
+
+// Call updateClock function to start updating the clock
+updateClock();
     
 })();
 </script>
