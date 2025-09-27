@@ -300,7 +300,7 @@ body {
 }
 </style>
 </head>
-<body><div id="startup-screen"><img alt="MEOS Logo" class="startup-logo" src="meos.png"/><img alt="Startup MEOS" class="startup-anim" src="loading.gif"/></div><audio id="startup-sound" autoplay style="display:none;"><source src="startup.mp3" type="audio/mp3"></audio><!-- Notepad -->
+<body><div id="startup-screen"><img alt="MEOS Logo" class="startup-logo" src="meos.png"/><img alt="Startup MEOS" class="startup-anim" src="loading.gif"/></div><audio autoplay="" id="startup-sound" style="display:none;"><source src="startup.mp3" type="audio/mp3"/></audio><!-- Notepad -->
 <div class="window" id="notepad" style="top:140px; left:80px; display:block;">
 <div class="title-bar"><span>Notepad</span><div><button onclick="minimizeApp('notepad')">_</button><button onclick="maximizeApp('notepad')">□</button><button onclick="closeApp('notepad')">X</button></div></div>
 <div class="content">
@@ -453,11 +453,12 @@ body {
 </div>
 </div>
 <!-- Control Panel -->
-<div class="window" id="controlpanel" style="top:360px; left:320px;">
-<div class="title-bar"><span>Control Panel</span><div><button onclick="minimizeApp('controlpanel')">_</button><button onclick="maximizeApp('controlpanel')">□</button><button onclick="closeApp('controlpanel')">X</button></div></div>
+<div class="window" id="control-panel" style="top:360px; left:320px;">
+<div class="title-bar"><span>Control Panel</span><div><button onclick="minimizeApp('control-panel')">_</button><button onclick="maximizeApp('control-panel')">□</button><button onclick="closeApp('control-panel')">X</button></div></div>
 <div class="content">
 <div class="cp-tabs">
 <button onclick="showCpTab('color')">Color</button>
+<button onclick="showCpTab('colorbug')">ColorBug</button>
 <button onclick="showCpTab('fonts')">Fonts</button>
 <button onclick="showCpTab('mouse')">Mouse</button>
 <button onclick="showCpTab('desktop')">Desktop</button>
@@ -476,6 +477,25 @@ body {
 </select>
 <button onclick="applyColorScheme()">Apply</button>
 </div>
+
+<!-- ColorBug -->
+<div class="cp-tab" id="cp-colorbug" style="display:none;">
+  <h4>ColorBug (Color Schemes)</h4>
+  <p>Select a preset or customize your scheme:</p>
+  <select id="colorbug-schemes">
+    <option>Sunset</option>
+    <option>Midnight</option>
+    <option>Forest</option>
+    <option>Retro 98</option>
+  </select>
+  <button onclick="applyColorBugScheme()">Apply</button>
+  <hr/>
+  <p>Export/Import Scheme:</p>
+  <button onclick="exportColorBugScheme()">Export</button>
+  <input type="file" id="import-colorbug" accept=".json,.mef"/>
+  <button onclick="importColorBugScheme()">Import</button>
+</div>
+
 <!-- Fonts -->
 <div class="cp-tab" id="cp-fonts" style="display:none;">
 <h4>Fonts</h4>
@@ -505,7 +525,8 @@ body {
 <!-- Desktop -->
 <div class="cp-tab" id="cp-desktop" style="display:none;">
 <h4>Desktop</h4>
-<label>Wallpaper: <input type="file"/></label><br/>
+<label>Wallpaper: <input type="file"/></label><br/><label>Wallpaper URL: <input type="text" id="bg-url" placeholder="dream.gif"/></label><br/>
+<button onclick="applyBackgroundUrl()">Apply URL</button><br/>
 <label>Screensaver: <input type="file"/></label><br/>
 <button onclick="alert('Desktop updated!')">Apply</button>
 </div>
@@ -594,34 +615,31 @@ body {
 </div>
 </div>
 <!-- Console Shell -->
-<div class="window" id="consoleshell" style="top:140px; left:140px; display:none; width:500px; height:300px;">
-  <div class="title-bar">
-    <span>Console Shell</span>
-    <div>
-      <button onclick="minimizeApp('consoleshell')">_</button>
-      <button onclick="maximizeApp('consoleshell')">□</button>
-      <button onclick="closeApp('consoleshell')">X</button>
-    </div>
-  </div>
-  <div class="menu-bar">
-    <span>File</span>
-    <span>Edit</span>
-    <span>View</span>
-    <span>Help</span>
-  </div>
-  <div class="content terminal" id="console-terminal" 
-       style="background:#000080; color:white; font-family:monospace; height:100%; padding:6px; box-sizing:border-box;">
-    <pre id="console-output">MagicME (R) Console Shell
+<div class="window" id="console-shell" style="top:140px; left:140px; display:none; width:500px; height:300px;">
+<div class="title-bar">
+<span>Console Shell</span>
+<div>
+<button onclick="minimizeApp('console-shell')">_</button>
+<button onclick="maximizeApp('console-shell')">□</button>
+<button onclick="closeApp('console-shell')">X</button>
+</div>
+</div>
+<div class="menu-bar">
+<span>File</span>
+<span>Edit</span>
+<span>View</span>
+<span>Help</span>
+</div>
+<div class="content terminal" id="console-terminal" style="background:#000080; color:yellow; font-family:monospace; height:100%; padding:6px; box-sizing:border-box;">
+<pre id="console-output">MagicME (R) Console Shell
 (C)Copyright MagicME 1995-2001, 2025
 
 $</pre>
-    <div>
-      <span id="console-prompt">$</span>
-      <input type="text" id="console-input" 
-             style="background:transparent; border:none; outline:none; color:white; font-family:monospace; width:60%;" 
-             autocomplete="off" />
-    </div>
-  </div>
+<div>
+<span id="console-prompt">$</span>
+<input autocomplete="off" id="console-input" style="background:transparent; border:none; outline:none; color:white; font-family:monospace; width:60%;" type="text"/>
+</div>
+</div>
 </div>
 <!-- ME-DOS Prompt -->
 <div class="window" id="me-dos" style="top:120px; left:120px; display:block;">
@@ -676,13 +694,13 @@ C:\&gt;</pre>
 </div>
 </div>
 <!-- Context Menu -->
-<div class="window" id="taskmanager" style="top:160px; left:160px; display:none;">
+<div class="window" id="task-manager" style="top:160px; left:160px; display:none;">
 <div class="title-bar">
 <span>Task Manager</span>
 <div>
-<button onclick="minimizeApp('taskmanager')">_</button>
-<button onclick="maximizeApp('taskmanager')">□</button>
-<button onclick="closeApp('taskmanager')">X</button>
+<button onclick="minimizeApp('task-manager')">_</button>
+<button onclick="maximizeApp('task-manager')">□</button>
+<button onclick="closeApp('task-manager')">X</button>
 </div>
 </div>
 <div class="content">
@@ -786,6 +804,9 @@ C:\&gt;</pre>
 <input accept=".gif" id="ss-upload" type="file"/><button onclick="applyScreensaver()">Apply</button>
 <button onclick="clearScreensaver()">Clear</button>
 </div>
+<p>Or enter a screensaver URL (.gif):</p>
+<input type="text" id="ss-url" placeholder="dream.gif"/>
+<button onclick="applyScreensaverUrl()">Apply URL</button>
 <div id="screensaver-preview" style="margin-top:8px; height:120px; border:1px solid #888; display:flex; align-items:center; justify-content:center;"></div>
 </div>
 </div>
@@ -899,14 +920,14 @@ C:\&gt;</pre>
 <div onclick="openApp('princejs')"><img alt="PrinceJS" class="menu-icon" src="https://thenerdmeme.github.io/MEOS-Icon-Viewer/30.png"/> PrinceJS</div>
 <div onclick="openApp('quake')"><img alt="Quake" class="menu-icon" src="https://thenerdmeme.github.io/MEOS-Icon-Viewer/72.png"/> Quake</div>
 <div onclick="openApp('doom')"><img alt="Doom" class="menu-icon" src="https://thenerdmeme.github.io/MEOS-Icon-Viewer/31.png"/> Doom</div>
-<div onclick="openApp('controlpanel')"><img alt="Control Panel" class="menu-icon" src="https://thenerdmeme.github.io/MEOS-Icon-Viewer/8.png"/> Control Panel</div>
+<div onclick="openApp('control-panel')"><img alt="Control Panel" class="menu-icon" src="https://thenerdmeme.github.io/MEOS-Icon-Viewer/8.png"/> Control Panel</div>
 <div onclick="openApp('me-dos')"><img alt="ME-DOS Prompt" class="menu-icon" src="https://thenerdmeme.github.io/MEOS-Icon-Viewer/9.png"/> ME-DOS Prompt</div>
 <div onclick="openApp('minesweeper')"><img alt="Minesweeper" class="menu-icon" src="https://thenerdmeme.github.io/MEOS-Icon-Viewer/10.png"/> Minesweeper</div>
 <div onclick="openApp('file-manager')"><img alt="File Manager" class="menu-icon" src="https://thenerdmeme.github.io/MEOS-Icon-Viewer/11.png"/> File Manager</div>
 <div onclick="openApp('skifree')"><img alt="SkiFree" class="menu-icon" src="https://thenerdmeme.github.io/MEOS-Icon-Viewer/13.png"/> SkiFree</div>
 <div onclick="openApp('excel97')"><img alt="Excel 97" class="menu-icon" src="https://thenerdmeme.github.io/MEOS-Icon-Viewer/14.png"/> Excel 97</div>
-<div onclick="openApp('consoleshell')"><img alt="Console Shell" class="menu-icon" src="https://thenerdmeme.github.io/MEOS-Icon-Viewer/15.png"/> Console Shell</div>
-<div onclick="openApp('taskmanager')"><img alt="Task Manager" class="menu-icon" src="https://thenerdmeme.github.io/MEOS-Icon-Viewer/16.png"/> Task Manager</div>
+<div onclick="openApp('console-shell')"><img alt="Console Shell" class="menu-icon" src="https://thenerdmeme.github.io/MEOS-Icon-Viewer/15.png"/> Console Shell</div>
+<div onclick="openApp('task-manager')"><img alt="Task Manager" class="menu-icon" src="https://thenerdmeme.github.io/MEOS-Icon-Viewer/16.png"/> Task Manager</div>
 <div onclick="openApp('sysmon')"><img alt="System Monitor" class="menu-icon" src="https://thenerdmeme.github.io/MEOS-Icon-Viewer/17.png"/> System Monitor</div>
 <div onclick="openApp('themes')"><img alt="Desktop Themes" class="menu-icon" src="https://thenerdmeme.github.io/MEOS-Icon-Viewer/18.png"/> Desktop Themes</div>
 <div onclick="openApp('screensavers')"><img alt="Desktop Screensavers" class="menu-icon" src="https://thenerdmeme.github.io/MEOS-Icon-Viewer/19.png"/> Desktop Screensavers</div>
@@ -915,40 +936,31 @@ C:\&gt;</pre>
 <div onclick="openApp('run')"><img alt="Run" class="menu-icon" src="https://thenerdmeme.github.io/MEOS-Icon-Viewer/23.png"/> Run</div>
 <div onclick="openApp('find')"><img alt="Find" class="menu-icon" src="https://thenerdmeme.github.io/MEOS-Icon-Viewer/24.png"/> Find</div>
 </div>
-
-
-
 <div onclick="openApp('power-options')">
-  <img src="https://thenerdmeme.github.io/MEOS-Icon-Viewer/25.png" class="menu-icon"/> Power Options
-</div>
-
-</div>
-
+<img class="menu-icon" src="https://thenerdmeme.github.io/MEOS-Icon-Viewer/25.png"/> Power Options
 </div>
 </div>
 </div>
-
-
+</div>
 </div>
 </div>
 
 <div class="window" id="power-options" style="top:220px; left:220px; width:300px; height:200px; display:none;">
-  <div class="title-bar">
-    <span>Power Options</span>
-    <div>
-      <button onclick="minimizeApp('power-options')">_</button>
-      <button onclick="maximizeApp('power-options')">□</button>
-      <button onclick="closeApp('power-options')">X</button>
-    </div>
-  </div>
-  <div class="content" style="display:flex; flex-direction:column; gap:10px; justify-content:center; align-items:center; height:100%;">
-    <button class="win95-btn" onclick="window.location.href='logon.html'">Log Off</button>
-    <button class="win95-btn" onclick="window.location.href='shutdown.html'">Restart</button>
-    <button class="win95-btn" onclick="window.location.href='shutdown.html'">Shut Down</button>
-    <button class="win95-btn" onclick="location.reload()">Sleep</button>
-  </div>
+<div class="title-bar">
+<span>Power Options</span>
+<div>
+<button onclick="minimizeApp('power-options')">_</button>
+<button onclick="maximizeApp('power-options')">□</button>
+<button onclick="closeApp('power-options')">X</button>
 </div>
-
+</div>
+<div class="content" style="display:flex; flex-direction:column; gap:10px; justify-content:center; align-items:center; height:100%;">
+<button class="win95-btn" onclick="window.location.href='logon.html'">Log Off</button>
+<button class="win95-btn" onclick="window.location.href='shutdown.html'">Restart</button>
+<button class="win95-btn" onclick="window.location.href='shutdown.html'">Shut Down</button>
+<button class="win95-btn" onclick="location.reload()">Sleep</button>
+</div>
+</div>
 <script>
     // Basic window controls
     function openApp(id){ const app=document.getElementById(id); if(!app) return; app.style.display='block'; bringToFront(app); }
@@ -2172,7 +2184,7 @@ const ctxOpenTask = document.getElementById('ctx-open-task');
 if (ctxOpenTask) {
   ctxOpenTask.addEventListener('click', ()=>{ 
     hideContextMenu(); 
-    openApp('taskmanager'); 
+    openApp('task-manager'); 
     refreshTaskList(); 
   });
 }
@@ -2182,7 +2194,7 @@ function refreshTaskList() {
   if (!list) return;
   list.innerHTML = '';
   document.querySelectorAll('.window').forEach(win => {
-    if (win.id !== 'taskmanager' && win.style.display !== 'none') {
+    if (win.id !== 'task-manager' && win.style.display !== 'none') {
       const li = document.createElement('li');
       li.textContent = win.querySelector('.title-bar span').textContent || win.id;
       list.appendChild(li);
@@ -2209,7 +2221,7 @@ function refreshTaskListTasks() {
   if (!list) return;
   list.innerHTML = '';
   document.querySelectorAll('.window').forEach(win => {
-    if (win.id !== 'taskmanager' && win.style.display !== 'none') {
+    if (win.id !== 'task-manager' && win.style.display !== 'none') {
       const li = document.createElement('li');
       li.textContent = win.querySelector('.title-bar span').textContent || win.id;
       li.dataset.id = win.id;
@@ -2954,7 +2966,7 @@ consoleInput.addEventListener('keydown', function(e) {
         return;
       case "exit":
         response = "Exiting Console Shell...";
-        setTimeout(()=>{ closeApp('consoleshell'); },200);
+        setTimeout(()=>{ closeApp('console-shell'); },200);
         break;
       default:
         if (raw.startsWith("echo ")) {
@@ -2969,6 +2981,103 @@ consoleInput.addEventListener('keydown', function(e) {
 });
     
 })();
+
+
+// Open Control Panel from context menu
+document.getElementById('ctx-open-control').addEventListener('click', () => {
+    hideContextMenu();
+    openApp('control-panel');
+});
+
+// Open Task Manager from context menu
+document.getElementById('ctx-open-task').addEventListener('click', () => {
+    hideContextMenu();
+    openApp('task-manager');
+});
+
+function applyColorBugScheme(){
+  const scheme = document.getElementById('colorbug-schemes').value;
+  if(scheme === 'Sunset'){
+    document.documentElement.style.setProperty('--menu-bg', '#ff9966');
+    document.documentElement.style.setProperty('--menu-text', '#000000');
+    document.documentElement.style.setProperty('--window-bg', '#ffeecc');
+    document.documentElement.style.setProperty('--window-border', '#cc6600');
+  } else if(scheme === 'Midnight'){
+    document.documentElement.style.setProperty('--menu-bg', '#000033');
+    document.documentElement.style.setProperty('--menu-text', '#ffffff');
+    document.documentElement.style.setProperty('--window-bg', '#000000');
+    document.documentElement.style.setProperty('--window-border', '#666699');
+  } else if(scheme === 'Forest'){
+    document.documentElement.style.setProperty('--menu-bg', '#336633');
+    document.documentElement.style.setProperty('--menu-text', '#ffffff');
+    document.documentElement.style.setProperty('--window-bg', '#ccffcc');
+    document.documentElement.style.setProperty('--window-border', '#003300');
+  } else if(scheme === 'Retro 98'){
+    document.documentElement.style.setProperty('--menu-bg', '#c0c0c0');
+    document.documentElement.style.setProperty('--menu-text', '#000000');
+    document.documentElement.style.setProperty('--window-bg', '#ffffff');
+    document.documentElement.style.setProperty('--window-border', '#000000');
+  }
+  alert('ColorBug scheme applied: ' + scheme);
+}
+
+function exportColorBugScheme(){
+  const scheme = {
+    menuBg: getComputedStyle(document.documentElement).getPropertyValue('--menu-bg').trim(),
+    menuText: getComputedStyle(document.documentElement).getPropertyValue('--menu-text').trim(),
+    windowBg: getComputedStyle(document.documentElement).getPropertyValue('--window-bg').trim(),
+    windowBorder: getComputedStyle(document.documentElement).getPropertyValue('--window-border').trim()
+  };
+  const blob = new Blob([JSON.stringify(scheme, null, 2)], {type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'colorbug-scheme.json';
+  a.click();
+}
+
+function importColorBugScheme(){
+  const input = document.getElementById('import-colorbug');
+  if(!input.files.length){ alert('No file selected'); return; }
+  const file = input.files[0];
+  const reader = new FileReader();
+  reader.onload = function(e){
+    try {
+      const scheme = JSON.parse(e.target.result);
+      if(scheme.menuBg) document.documentElement.style.setProperty('--menu-bg', scheme.menuBg);
+      if(scheme.menuText) document.documentElement.style.setProperty('--menu-text', scheme.menuText);
+      if(scheme.windowBg) document.documentElement.style.setProperty('--window-bg', scheme.windowBg);
+      if(scheme.windowBorder) document.documentElement.style.setProperty('--window-border', scheme.windowBorder);
+      alert('ColorBug scheme imported successfully!');
+    } catch(err){
+      alert('Invalid scheme file.');
+    }
+  };
+  reader.readAsText(file);
+}
+
+
+function applyBackgroundUrl(){
+  const url = document.getElementById('bg-url').value.trim();
+  if(url){
+    document.body.style.background = `url('${url}') no-repeat center center fixed`;
+    document.body.style.backgroundSize = 'cover';
+    alert('Background updated from URL!');
+  } else {
+    alert('Please enter a valid image URL.');
+  }
+}
+
+function applyScreensaverUrl(){
+  const url = document.getElementById('ss-url').value.trim();
+  const preview = document.getElementById('screensaver-preview');
+  if(url.endsWith('.gif')){
+    preview.innerHTML = `<img src="${url}" style="max-height:100%; max-width:100%;">`;
+    alert('Screensaver set from URL!');
+  } else {
+    alert('Please enter a valid .gif URL.');
+  }
+}
+
 </script>
 </body>
 </html>
