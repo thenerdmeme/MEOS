@@ -35,12 +35,20 @@
   <ul>
     <li class="option" onclick="bootMEOS()">1. Boot MEOS Normally</li>
   </ul>
+    <li class="option" onclick="bootMEOS()">1. Boot MEOS Safe Mode</li>
+  </ul>
 
   <script>
     function bootMEOS() {
       alert('Booting MEOS...');
       setTimeout(() => {
         window.location.href = 'logon.html';
+      }, 500); // delay before redirect (0.5s)
+    }
+    function bootMEOS() {
+      alert('Booting MEOS Safe Mode...');
+      setTimeout(() => {
+        window.location.href = 'https://thenerdmeme.github.io/MEOS_(Safe%20Mode)/';
       }, 500); // delay before redirect (0.5s)
     }
   </script>
