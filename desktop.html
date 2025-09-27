@@ -593,6 +593,36 @@ body {
 <iframe src="https://rezmason.github.io/excel_97_egg/index.html" title="Excel 97"></iframe>
 </div>
 </div>
+<!-- Console Shell -->
+<div class="window" id="consoleshell" style="top:140px; left:140px; display:none; width:500px; height:300px;">
+  <div class="title-bar">
+    <span>Console Shell</span>
+    <div>
+      <button onclick="minimizeApp('consoleshell')">_</button>
+      <button onclick="maximizeApp('consoleshell')">□</button>
+      <button onclick="closeApp('consoleshell')">X</button>
+    </div>
+  </div>
+  <div class="menu-bar">
+    <span>File</span>
+    <span>Edit</span>
+    <span>View</span>
+    <span>Help</span>
+  </div>
+  <div class="content terminal" id="console-terminal" 
+       style="background:#000080; color:white; font-family:monospace; height:100%; padding:6px; box-sizing:border-box;">
+    <pre id="console-output">MagicME (R) Console Shell
+(C)Copyright MagicME 1995-2001, 2025
+
+$</pre>
+    <div>
+      <span id="console-prompt">$</span>
+      <input type="text" id="console-input" 
+             style="background:transparent; border:none; outline:none; color:white; font-family:monospace; width:60%;" 
+             autocomplete="off" />
+    </div>
+  </div>
+</div>
 <!-- ME-DOS Prompt -->
 <div class="window" id="me-dos" style="top:120px; left:120px; display:block;">
 <div class="title-bar"><span>ME-DOS Prompt</span><div><button onclick="minimizeApp('me-dos')">_</button><button onclick="maximizeApp('me-dos')">□</button><button onclick="closeApp('me-dos')">X</button></div></div>
@@ -622,71 +652,6 @@ C:\&gt;</pre>
 <p><strong>Memory Usage:</strong> <span id="sysmon-mem">0 MB / 4096 MB</span></p>
 <p><strong>Processes:</strong> <span id="sysmon-proc">0</span></p>
 <canvas height="160" id="sysmon-chart" style="border:1px solid #888; background:#000;" width="440"></canvas>
-</div>
-</div>
-<!-- Vim -->
-<div class="window" id="vim" style="top:220px; left:220px; width:720px; height:520px; display:none;">
-<div class="title-bar">
-<span>Vim</span>
-<div>
-<button onclick="minimizeApp('vim')">_</button>
-<button onclick="maximizeApp('vim')">□</button>
-<button onclick="closeApp('vim')">X</button>
-</div>
-</div>
-<div class="menu-bar">
-<span onclick="document.getElementById('vim-help').style.display = (document.getElementById('vim-help').style.display==='block'?'none':'block')">Help</span>
-<span onclick="document.getElementById('vim-vimrc').style.display = (document.getElementById('vim-vimrc').style.display==='block'?'none':'block')">.vimrc Example</span>
-<span onclick="closeApp('vim')">Exit</span>
-</div>
-<div class="content" style="display:flex; flex-direction:column; height:calc(100% - 30px);">
-<textarea id="vim-text" placeholder="-- VIM Simulation (type text here) --" style="flex:1; font-family:monospace; font-size:13px; background:#111; color:#0f0; padding:6px; border:none; outline:none;"></textarea>
-<div id="vim-help" style="display:none; background:#111; color:#0f0; padding:8px; font-family:monospace; font-size:12px; overflow-y:auto; max-height:160px; border-top:2px solid #444;">
-<pre>
-Vim Command Reference
-
-1. Insert Mode:
- i   - Insert before cursor
- a   - Insert after cursor
- I   - Insert at beginning of line
- A   - Insert at end of line
- o   - Open new line below
- O   - Open new line above
- Esc - Exit insert mode
-
-2. Navigation:
- h / ←  - Left    l / → - Right
- j / ↓  - Down    k / ↑ - Up
- w - Next word    b - Prev word    e - End of word
- 0 - Line start   $ - Line end
- gg - File start  G - File end
- NG - Go to line N (e.g., 5G)
-</pre>
-</div>
-<div id="vim-vimrc" style="display:none; background:#222; color:#0f0; padding:8px; font-family:monospace; font-size:12px; overflow-y:auto; max-height:200px; border-top:2px solid #444;">
-<pre>
-" Example .vimrc snippet for plugin management with vim-plug
-call plug#begin('~/.vim/plugged')
-
-" Specify plugins here
-Plug 'preservim/nerdtree' " File manager
-Plug 'tpope/vim-surround' " Easily add/change/delete surroundings
-Plug 'mattn/emmet-vim' " Emmet support for HTML/CSS
-Plug 'leafgarland/typescript-vim' " TypeScript syntax highlighting
-Plug 'pangloss/vim-javascript' " JavaScript syntax highlighting
-Plug 'hail2u/vim-css3-syntax' " CSS3 syntax highlighting
-Plug 'prettier/vim-prettier', { 'do': 'yarn install' } " Code formatter
-
-call plug#end()
-
-" Basic settings
-set number        " Show line numbers
-set autoindent    " Auto-indent lines
-set tabstop=2     " Set tab width to 2 spaces
-set shiftwidth=2  " Set shift width for autoindent to 2 spaces
-set expandtab     " Use spaces instead of tabs
-</pre>
-</div>
 </div>
 </div>
 <!-- Clock -->
@@ -857,7 +822,7 @@ set expandtab     " Use spaces instead of tabs
 <li>File Manager — Version v1.0</li>
 <li>SkiFree — Version v1.0</li>
 <li>Excel 97 — Version v1.0</li>
-<li>Vim — Version v1.0</li>
+<li>Console Shell — Version v1.0</li>
 <li>Task Manager — Version v1.0</li>
 <li>System Monitor — Version v1.0</li>
 <li>Desktop Themes — Version v1.0</li>
@@ -940,7 +905,7 @@ set expandtab     " Use spaces instead of tabs
 <div onclick="openApp('file-manager')"><img alt="File Manager" class="menu-icon" src="https://thenerdmeme.github.io/MEOS-Icon-Viewer/11.png"/> File Manager</div>
 <div onclick="openApp('skifree')"><img alt="SkiFree" class="menu-icon" src="https://thenerdmeme.github.io/MEOS-Icon-Viewer/13.png"/> SkiFree</div>
 <div onclick="openApp('excel97')"><img alt="Excel 97" class="menu-icon" src="https://thenerdmeme.github.io/MEOS-Icon-Viewer/14.png"/> Excel 97</div>
-<div onclick="openApp('vim')"><img alt="Vim" class="menu-icon" src="https://thenerdmeme.github.io/MEOS-Icon-Viewer/15.png"/> Vim</div>
+<div onclick="openApp('consoleshell')"><img alt="Console Shell" class="menu-icon" src="https://thenerdmeme.github.io/MEOS-Icon-Viewer/15.png"/> Console Shell</div>
 <div onclick="openApp('taskmanager')"><img alt="Task Manager" class="menu-icon" src="https://thenerdmeme.github.io/MEOS-Icon-Viewer/16.png"/> Task Manager</div>
 <div onclick="openApp('sysmon')"><img alt="System Monitor" class="menu-icon" src="https://thenerdmeme.github.io/MEOS-Icon-Viewer/17.png"/> System Monitor</div>
 <div onclick="openApp('themes')"><img alt="Desktop Themes" class="menu-icon" src="https://thenerdmeme.github.io/MEOS-Icon-Viewer/18.png"/> Desktop Themes</div>
@@ -2967,6 +2932,41 @@ function updateClock() {
 
 // Call updateClock function to start updating the clock
 updateClock();
+
+const consoleOutput = document.getElementById('console-output');
+const consoleInput = document.getElementById('console-input');
+const consolePrompt = document.getElementById('console-prompt');
+
+consoleInput.addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') {
+    e.preventDefault();
+    const raw = consoleInput.value.trim();
+    consoleOutput.textContent += "\n" + consolePrompt.textContent + raw;
+    consoleInput.value = "";
+
+    let response = "";
+    switch (raw.toLowerCase()) {
+      case "help":
+        response = "Available commands: help, echo, clear, exit";
+        break;
+      case "clear":
+        consoleOutput.textContent = "MagicME (R) Console Shell\n(C)Copyright MagicME 1995-2001, 2025\n";
+        return;
+      case "exit":
+        response = "Exiting Console Shell...";
+        setTimeout(()=>{ closeApp('consoleshell'); },200);
+        break;
+      default:
+        if (raw.startsWith("echo ")) {
+          response = raw.slice(5);
+        } else {
+          response = "Unknown command: " + raw;
+        }
+    }
+    consoleOutput.textContent += "\n" + response;
+    consoleOutput.scrollTop = consoleOutput.scrollHeight;
+  }
+});
     
 })();
 </script>
